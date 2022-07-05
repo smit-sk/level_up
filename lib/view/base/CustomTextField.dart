@@ -14,14 +14,16 @@ class CustomTextFeild extends StatefulWidget {
     required this.onChanged,
     required this.validator,
     required this.isObscureText,
+    required this.isError,
   }) : super(key: key);
 
   final double height;
   final double width;
   final String lableText;
   final String? Function(String value) onChanged;
-  final String Function(String? value)? validator;
+  final String Function(String? value) validator;
   final bool isObscureText;
+  final bool isError;
 
   @override
   State<CustomTextFeild> createState() => _CustomTextFeildState();
@@ -33,11 +35,11 @@ class _CustomTextFeildState extends State<CustomTextFeild> {
     double _width = MediaQuery.of(context).size.width * 0.01;
     double _height = MediaQuery.of(context).size.height * 0.01;
     return Container(
-      width: _width * 80,
-      height: _height * 7,
+      width: widget.width,
+      height: widget.height,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: grey)),
+          border: Border.all(color: widget.isError ? Colors.red : grey)),
       child: TextFormField(
         cursorColor: white,
         textAlign: TextAlign.start,
@@ -53,13 +55,13 @@ class _CustomTextFeildState extends State<CustomTextFeild> {
               color: grey, fontSize: 16, fontWeight: FontWeight.normal),
           fillColor: Colors.transparent,
           isDense: true,
-          contentPadding: EdgeInsets.all(10),
+          contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
           focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: grey),
+            borderSide: BorderSide(color: widget.isError ? Colors.red : grey),
             borderRadius: BorderRadius.circular(6),
           ),
           enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: grey),
+            borderSide: BorderSide(color: widget.isError ? Colors.red : grey),
             borderRadius: BorderRadius.circular(6),
           ),
         ),

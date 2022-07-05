@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:levelup/util/color.dart';
 import 'package:levelup/util/images.dart';
 import 'package:levelup/view/screens/Auth/signInDefault.dart';
 
@@ -20,7 +21,7 @@ class SignInCreate extends StatelessWidget {
         fit: BoxFit.cover,
         image: AssetImage(bgimage),
         colorFilter:
-            ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
+            ColorFilter.mode(primary.withOpacity(0.5), BlendMode.dstATop),
       )),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -36,7 +37,7 @@ class SignInCreate extends StatelessWidget {
                   scale: 4,
                 ),
                 SizedBox(
-                  height: _height * 5,
+                  height: 30,
                 ),
                 RichText(
                     text: const TextSpan(

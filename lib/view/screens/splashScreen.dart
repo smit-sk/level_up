@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:levelup/util/images.dart';
-import 'package:levelup/view/screens/SignInCreate.dart';
+import 'package:levelup/view/screens/Auth/SignInCreate.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -23,6 +23,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double _width = MediaQuery.of(context).size.width * 0.01;
+    double _height = MediaQuery.of(context).size.height * 0.01;
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
@@ -40,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 Image.asset(
                   logo,
-                  scale: 3,
+                  scale: 4,
                 ),
                 SizedBox(
                   height: 30,

@@ -5,12 +5,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:levelup/util/color.dart';
 
 class CustomButton extends StatefulWidget {
-  const CustomButton({Key? key, required this.width, required this.height, required this.lableText})
+  const CustomButton(
+      {Key? key,
+      required this.width,
+      required this.height,
+      required this.lableText,
+      required this.onPressed,
+      })
       : super(key: key);
 
   final double width;
   final double height;
   final String lableText;
+  final  Function() onPressed;
   @override
   State<CustomButton> createState() => _CustomButtonState();
 }
@@ -22,9 +29,9 @@ class _CustomButtonState extends State<CustomButton> {
     double _height = MediaQuery.of(context).size.height * 0.01;
     return Container(
       width: widget.width,
-      height: _height * 7,
+      height: widget.height,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: widget.onPressed,
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(primary),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -33,7 +40,7 @@ class _CustomButtonState extends State<CustomButton> {
                     side: BorderSide(color: primary)))),
         child: Center(
           child: Text(
-            "Sign In",
+            widget.lableText,
             style: GoogleFonts.mulish(
                 color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
           ),
