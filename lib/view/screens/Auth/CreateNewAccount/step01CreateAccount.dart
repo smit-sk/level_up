@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
-
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:levelup/util/color.dart';
 import 'package:levelup/util/decoration.dart';
@@ -12,6 +12,7 @@ import 'package:levelup/view/base/CustomButton.dart';
 import 'package:levelup/view/base/CustomRadioButton.dart';
 import 'package:levelup/view/base/CustomTextField.dart';
 import 'package:levelup/view/base/ErrorTextField.dart';
+import 'package:levelup/view/screens/Auth/CreateNewAccount/step02CreateAccount.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class Step01CreateAccount extends StatefulWidget {
@@ -402,8 +403,10 @@ class _Step01CreateAccountState extends State<Step01CreateAccount> {
                   CustomButton(
                     width: _width * 90,
                     height: _height * 7,
-                    lableText: "Next  ",
-                    onPressed: () {},
+                    lableText: "Next",
+                    onPressed: () {
+                      Get.to(() => Step02CreateAccount());
+                    },
                   ),
                   SizedBox(
                     height: 30,

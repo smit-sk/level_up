@@ -11,3 +11,5 @@ final TextStyle textStylesubHeading = GoogleFonts.mulish(
 final TextStyle textStyleButton = GoogleFonts.mulish(
     color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700);
 
+final TextStyle textStyleCololrBar = GoogleFonts.mulish(
+    color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600);
