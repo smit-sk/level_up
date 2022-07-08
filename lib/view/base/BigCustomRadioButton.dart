@@ -32,41 +32,47 @@ class _BigCustomRadioBUttonState extends State<BigCustomRadioBUtton> {
       width: widget.width,
       child: Row(
         children: [
-          Container(
-            height: widget.height,
-            width: (widget.width / 2) - 1,
-            child: Center(
-              child: Text(
-                "U.S.Standard",
-                style: GoogleFonts.mulish(
-                    fontSize: 16,
-                    color: widget.isSelectedUSstandard ? primary : white,
-                    fontWeight: FontWeight.w700),
+          GestureDetector(
+            onTap: widget.onTap,
+            child: Container(
+              height: widget.height,
+              width: (widget.width / 2) - 1,
+              child: Center(
+                child: Text(
+                  "U.S.Standard",
+                  style: GoogleFonts.mulish(
+                      fontSize: 16,
+                      color: widget.isSelectedUSstandard ? primary : white,
+                      fontWeight: FontWeight.w700),
+                ),
               ),
-            ),
-            decoration: BoxDecoration(
-              color: widget.isSelectedUSstandard ? white : transperant,
-              borderRadius: BorderRadius.circular(10),
-              //border: Border.all(color: lightgrey),
+              decoration: BoxDecoration(
+                color: widget.isSelectedUSstandard ? white : transperant,
+                borderRadius: BorderRadius.circular(10),
+                //border: Border.all(color: lightgrey),
+              ),
             ),
           ),
-          Container(
-            height: widget.height,
-            width: (widget.width / 2) - 1,
-            child: Center(
-              child: Text(
-                "Metric",
-                style: GoogleFonts.mulish(
-                    fontSize: 16,
-                    color: widget.isSelectedMatric ? primary : white,
-                    fontWeight: FontWeight.w700),
+          GestureDetector(
+            onTap: widget.onTap,
+            child: Container(
+              height: widget.height,
+              width: (widget.width / 2) - 1,
+              child: Center(
+                child: Text(
+                  "Metric",
+                  style: GoogleFonts.mulish(
+                      fontSize: 16,
+                      color: widget.isSelectedMatric ? primary : white,
+                      fontWeight: FontWeight.w700),
+                ),
               ),
-            ),
-            decoration: BoxDecoration(
-              color: widget.isSelectedMatric ? white : transperant,
-              borderRadius: BorderRadius.circular(10),
-              // border: Border.all(
-              //     color: widget.isSelectedMatric ? white : lightgrey),
+              decoration: BoxDecoration(
+                color: widget.isSelectedMatric ? white : transperant,
+                borderRadius: BorderRadius.circular(10),
+                // border: Border.all(
+                //     color: widget.isSelectedMatric ? white : lightgrey),
+              ),
             ),
           )
         ],

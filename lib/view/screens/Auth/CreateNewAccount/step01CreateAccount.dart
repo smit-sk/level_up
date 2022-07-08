@@ -1,19 +1,28 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
+import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:levelup/helper/routeHelper.dart';
 import 'package:levelup/util/color.dart';
 import 'package:levelup/util/decoration.dart';
 import 'package:levelup/util/images.dart';
+import 'package:levelup/view/base/BigCustomRadioButton.dart';
 import 'package:levelup/view/base/CustomButton.dart';
 import 'package:levelup/view/base/CustomRadioButton.dart';
 import 'package:levelup/view/base/CustomTextField.dart';
+import 'package:levelup/view/base/CustomTextFieldSuffix.dart';
 import 'package:levelup/view/base/ErrorTextField.dart';
 import 'package:levelup/view/screens/Auth/CreateNewAccount/step02CreateAccount.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:intl/intl.dart';
 
 class Step01CreateAccount extends StatefulWidget {
   const Step01CreateAccount({Key? key}) : super(key: key);
@@ -23,6 +32,18 @@ class Step01CreateAccount extends StatefulWidget {
 }
 
 class _Step01CreateAccountState extends State<Step01CreateAccount> {
+  bool isMale = false;
+  bool isFemale = true;
+
+  bool isUSstandard = true;
+  bool isMetric = false;
+
+  String MetricHeight = "";
+  TextEditingController _heightController = TextEditingController();
+
+  List usStandardList1 = ["1 feet", "2 feet"];
+  String selectedUsStandardHeight = "1 feet";
+
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width * 0.01;
@@ -32,8 +53,6 @@ class _Step01CreateAccountState extends State<Step01CreateAccount> {
           image: DecorationImage(
         fit: BoxFit.cover,
         image: AssetImage(bgimage4),
-        colorFilter:
-            ColorFilter.mode(primary.withOpacity(0.25), BlendMode.dstATop),
       )),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -141,8 +160,20 @@ class _Step01CreateAccountState extends State<Step01CreateAccount> {
                                       fontWeight: FontWeight.w600,
                                       color: lightgrey),
                                 ),
-                                Icon(
-                                  Icons.calendar_month_sharp,
+                                IconButton(
+                                  onPressed: () {
+                                    // showDatePicker(
+                                    //     firstDate: DateTime(2022),
+                                    //     lastDate: DateTime(2092),
+                                    //     context: context,
+                                    //     initialDate: DateTime.now(),
+                                    //     initialDatePickerMode:
+                                    //         DatePickerMode.year);
+                                    DatePickerDialog(_height * 80);
+                                  },
+                                  icon: Icon(
+                                    Icons.calendar_month_sharp,
+                                  ),
                                   color: lightgrey,
                                 )
                               ],
@@ -172,8 +203,13 @@ class _Step01CreateAccountState extends State<Step01CreateAccount> {
                               width: _width * 42.5,
                               icon: Icons.woman,
                               text: "Female",
-                              isSelected: false,
-                              onTap: () {},
+                              isSelected: isFemale,
+                              onTap: () {
+                                setState(() {
+                                  isFemale = !isFemale;
+                                  isMale = !isMale;
+                                });
+                              },
                             ),
                             SizedBox(
                               width: _width * 5,
@@ -183,8 +219,13 @@ class _Step01CreateAccountState extends State<Step01CreateAccount> {
                               width: _width * 42.5,
                               icon: Icons.man,
                               text: "Male",
-                              isSelected: true,
-                              onTap: () {},
+                              isSelected: isMale,
+                              onTap: () {
+                                setState(() {
+                                  isFemale = !isFemale;
+                                  isMale = !isMale;
+                                });
+                              },
                             )
                           ],
                         ),
@@ -201,202 +242,220 @@ class _Step01CreateAccountState extends State<Step01CreateAccount> {
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                          height: _height * 7,
-                          // width: _width * 90,
-                          child: Row(
-                            children: [
-                              Container(
-                                height: _height * 7,
-                                width: _width * 44.6,
-                                child: Center(
-                                  child: Text(
-                                    "U.S.Standard",
-                                    style: GoogleFonts.mulish(
-                                        fontSize: 16,
-                                        color: primary,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: white,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: lightgrey),
-                                ),
-                              ),
-                              Container(
-                                height: _height * 7,
-                                width: _width * 44.6,
-                                child: Center(
-                                  child: Text(
-                                    "Metric",
-                                    style: GoogleFonts.mulish(
-                                        fontSize: 16,
-                                        color: lightgrey,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: transperant,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: transperant),
-                                ),
-                              )
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: lightgrey),
-                          ),
-                        )
+                        BigCustomRadioBUtton(
+                            height: _height * 7,
+                            width: _width * 88,
+                            isSelectedUSstandard: isUSstandard,
+                            isSelectedMatric: isMetric,
+                            onTap: () {
+                              setState(() {
+                                isUSstandard = !isUSstandard;
+                                isMetric = !isMetric;
+                              });
+                            }),
                       ],
                     ),
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    width: _width * 90,
-                    child: Row(
-                      children: [
-                        Container(
-                          width: _width * 42.5,
-                          height: _height * 7,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: grey)),
+                  isUSstandard
+                      ? Container(
+                          width: _width * 90,
                           child: Row(
                             children: [
                               Container(
                                 height: _height * 7,
-                                width: _width * 30,
-                                child: TextFormField(
-                                  cursorColor: white,
-                                  textAlign: TextAlign.start,
-                                  style: GoogleFonts.mulish(
-                                      fontSize: 16,
-                                      color: white,
-                                      fontWeight: FontWeight.w700),
-                                  onChanged: (value) {},
-                                  decoration: InputDecoration(
-                                    fillColor: Colors.transparent,
-                                    contentPadding: EdgeInsets.all(13),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: transperant),
-                                      borderRadius: BorderRadius.circular(6),
+                                width: _width * 42.5,
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    isExpanded: true,
+                                    hint: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.list,
+                                          size: 16,
+                                          color: Colors.yellow,
+                                        ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            'Select Item',
+                                            style: GoogleFonts.mulish(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700,
+                                              color: white,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: transperant),
-                                      borderRadius: BorderRadius.circular(6),
+                                    items: usStandardList1
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: item,
+                                              child: Text(
+                                                item,
+                                                style: GoogleFonts.mulish(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: white,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ))
+                                        .toList(),
+                                    value: selectedUsStandardHeight,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedUsStandardHeight =
+                                            value as String;
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Icons.expand_more,
+                                      size: 25,
                                     ),
+                                    iconSize: 14,
+                                    iconEnabledColor: white,
+                                    iconDisabledColor: Colors.grey,
+                                    // buttonHeight: 50,
+                                    // buttonWidth: 160,
+                                    buttonPadding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    buttonDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: white,
+                                      ),
+                                      color: transperant,
+                                    ),
+                                    buttonElevation: 2,
+                                    itemHeight: 40,
+                                    itemPadding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    dropdownMaxHeight: 200,
+                                    dropdownWidth: _width * 30,
+                                    dropdownPadding: null,
+                                    dropdownDecoration: BoxDecoration(
+                                      border: Border.all(color: grey),
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: transperant,
+                                    ),
+                                    dropdownElevation: 8,
+                                    scrollbarRadius: const Radius.circular(40),
+                                    scrollbarThickness: 6,
+                                    scrollbarAlwaysShow: true,
+                                    offset: const Offset(10, 0),
                                   ),
                                 ),
                               ),
-                              Icon(
-                                Icons.expand_more,
-                                color: lightgrey,
-                                size: 30,
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: _width * 5,
-                        ),
-                        Container(
-                          width: _width * 42.5,
-                          height: _height * 7,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: grey)),
-                          child: Row(
-                            children: [
+                              SizedBox(
+                                width: _width * 5,
+                              ),
                               Container(
                                 height: _height * 7,
-                                width: _width * 30,
-                                child: TextFormField(
-                                  cursorColor: white,
-                                  textAlign: TextAlign.start,
-                                  style: GoogleFonts.mulish(
-                                      fontSize: 16,
-                                      color: white,
-                                      fontWeight: FontWeight.w700),
-                                  onChanged: (value) {},
-                                  decoration: InputDecoration(
-                                    fillColor: Colors.transparent,
-                                    contentPadding: EdgeInsets.all(13),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: transperant),
-                                      borderRadius: BorderRadius.circular(6),
+                                width: _width * 42.5,
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    isExpanded: true,
+                                    hint: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.list,
+                                          size: 16,
+                                          color: Colors.yellow,
+                                        ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            'Select Item',
+                                            style: GoogleFonts.mulish(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w700,
+                                              color: white,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: transperant),
-                                      borderRadius: BorderRadius.circular(6),
+                                    items: usStandardList1
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: item,
+                                              child: Text(
+                                                item,
+                                                style: GoogleFonts.mulish(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: white,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ))
+                                        .toList(),
+                                    value: selectedUsStandardHeight,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedUsStandardHeight =
+                                            value as String;
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Icons.expand_more,
+                                      size: 25,
                                     ),
+                                    iconSize: 14,
+                                    iconEnabledColor: white,
+                                    iconDisabledColor: Colors.grey,
+                                    buttonPadding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    buttonDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: white,
+                                      ),
+                                      color: transperant,
+                                    ),
+                                    buttonElevation: 2,
+                                    itemHeight: 40,
+                                    itemPadding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    dropdownMaxHeight: 200,
+                                    dropdownWidth: _width * 30,
+                                    dropdownPadding: null,
+                                    dropdownDecoration: BoxDecoration(
+                                      border: Border.all(color: grey),
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: transperant,
+                                    ),
+                                    dropdownElevation: 8,
+                                    scrollbarRadius: const Radius.circular(40),
+                                    scrollbarThickness: 6,
+                                    scrollbarAlwaysShow: true,
+                                    offset: const Offset(10, 0),
                                   ),
                                 ),
                               ),
-                              Icon(
-                                Icons.expand_more,
-                                color: lightgrey,
-                                size: 30,
-                              )
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    width: _width * 90,
-                    height: _height * 7,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: grey)),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: _height * 7,
-                          width: _width * 77,
-                          child: TextFormField(
-                            cursorColor: white,
-                            textAlign: TextAlign.start,
-                            style: GoogleFonts.mulish(
-                                fontSize: 16,
-                                color: white,
-                                fontWeight: FontWeight.w700),
-                            onChanged: (value) {},
-                            decoration: InputDecoration(
-                              fillColor: Colors.transparent,
-                              contentPadding: EdgeInsets.all(13),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: transperant),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: transperant),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          child: Text("cm",
-                              style: GoogleFonts.mulish(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  color: white)),
                         )
-                      ],
-                    ),
-                  ),
+                      : CustormTextFieldSuffix(
+                          height: _height * 7,
+                          widthContainer: _width * 90,
+                          widthTextField: _width * 60,
+                          controller: _heightController,
+                          textInputType: TextInputType.number,
+                          onChanged: (value) {
+                            setState(() {
+                              this.MetricHeight = value;
+                            });
+                          },
+                          suffixText: "cm"),
                   SizedBox(
                     height: _height * 3,
                   ),
@@ -405,7 +464,7 @@ class _Step01CreateAccountState extends State<Step01CreateAccount> {
                     height: _height * 7,
                     lableText: "Next",
                     onPressed: () {
-                      Get.to(() => Step02CreateAccount());
+                      Get.toNamed(RouteHelper.getStep02CreateAccountRoute());
                     },
                   ),
                   SizedBox(
@@ -416,5 +475,40 @@ class _Step01CreateAccountState extends State<Step01CreateAccount> {
             ),
           )),
     );
+  }
+
+  Future DatePickerDialog(height) async {
+    return getDateRangePicker();
+    // return showRoundedDatePicker(
+    //     context: context,
+    //     initialDate: DateTime.now(),
+    //     firstDate: DateTime(DateTime.now().year - 1),
+    //     lastDate: DateTime(DateTime.now().year + 1),
+    //     borderRadius: 16,
+    //     height: 400);
+  }
+
+  Widget getDateRangePicker() {
+    return Container(
+      child: CalendarCarousel(
+        
+      ),
+      //     child: Card(
+      //         child: SfDateRangePicker(
+      //   initialSelectedDate: DateTime.now(),
+      //   view: DateRangePickerView.month,
+      //   selectionMode: DateRangePickerSelectionMode.single,
+      //   onSelectionChanged: selectionChanged,
+      // )
+      // )
+    );
+  }
+
+  void selectionChanged(DateRangePickerSelectionChangedArgs args) {
+    String _selectedDate = DateFormat('dd MMMM, yyyy').format(args.value);
+
+    // SchedulerBinding.instance!.addPostFrameCallback((duration) {
+    //   setState(() {});
+    // });
   }
 }

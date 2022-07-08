@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:levelup/helper/routeHelper.dart';
+import 'package:levelup/util/color.dart';
 import 'package:levelup/view/screens/splashScreen.dart';
 
 void main() {
@@ -13,11 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'Level Up',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: primary,
       ),
-      home: SplashScreen(),
+      getPages: RouteHelper.routes,
+      initialRoute: RouteHelper.getDashboardRoute(),
     );
   }
 }

@@ -1,22 +1,12 @@
 // ignore_for_file: sort_child_properties_last, prefer_const_constructors
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:levelup/helper/routeHelper.dart';
 import 'package:levelup/util/color.dart';
-import 'package:levelup/util/decoration.dart';
 import 'package:levelup/util/images.dart';
-import 'package:levelup/view/base/BigCustomRadioButton.dart';
 import 'package:levelup/view/base/CustomButton.dart';
 import 'package:levelup/view/base/CustomContainerTwoText.dart';
-import 'package:levelup/view/base/CustomTextFieldSuffix.dart';
 
 class ResultCA extends StatefulWidget {
   const ResultCA({Key? key}) : super(key: key);
@@ -37,8 +27,6 @@ class _ResultCAState extends State<ResultCA> {
           image: DecorationImage(
         fit: BoxFit.cover,
         image: AssetImage(isMale ? bgimage9 : bgimage10),
-        colorFilter:
-            ColorFilter.mode(primary.withOpacity(0.25), BlendMode.dstATop),
       )),
       child: Scaffold(
         backgroundColor: transperant,
@@ -54,7 +42,7 @@ class _ResultCAState extends State<ResultCA> {
             ),
           ),
           title: Text(
-            "Body Fat",
+            "Result",
             style: GoogleFonts.mulish(
                 color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900),
           ),
@@ -149,7 +137,9 @@ class _ResultCAState extends State<ResultCA> {
                   width: _width * 90,
                   height: _height * 7,
                   lableText: "Add Weigh In",
-                  onPressed: () {})
+                  onPressed: () {
+                    Get.toNamed(RouteHelper.getStep05CreateAccountRoute());
+                  })
             ],
           ),
         ),

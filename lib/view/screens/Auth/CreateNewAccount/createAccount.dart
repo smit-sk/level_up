@@ -1,8 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:levelup/helper/routeHelper.dart';
 import 'package:levelup/util/color.dart';
 import 'package:levelup/util/decoration.dart';
 import 'package:levelup/util/images.dart';
@@ -19,6 +22,97 @@ class CreateAccount extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
+  String? email;
+  bool isErrorEmail = false;
+  String? fname;
+  bool isErrorFname = false;
+  String? surname;
+  bool isErrorSurname = false;
+  String? password;
+  bool isErrorPassword = false;
+  String? cpassword;
+  bool isErrorCPassword = false;
+
+  String errorText = "Enter valid";
+
+  bool validateForm() {
+    bool fnameValid = fname != null
+        ? fname!.isNotEmpty
+            ? true
+            : false
+        : false;
+    bool surnameValid = surname != null
+        ? surname!.isNotEmpty
+            ? true
+            : false
+        : false;
+    bool emailValid = email != null
+        ? email!.isNotEmpty
+            ? RegExp(
+                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                .hasMatch(email!)
+            : false
+        : false;
+    bool passwordValid = password != null
+        ? password!.isNotEmpty
+            ? true
+            : false
+        : false;
+    bool cpasswordvalid = cpassword != null
+        ? cpassword!.isNotEmpty
+            ? cpassword == password
+                ? true
+                : false
+            : false
+        : false;
+
+    if (fnameValid) {
+      setState(() {
+        isErrorFname = false;
+      });
+    } else {
+      setState(() {
+        isErrorFname = true;
+      });
+    }
+
+    setState(() {
+      if (surnameValid) {
+        isErrorSurname = false;
+      } else {
+        isErrorSurname = true;
+      }
+    });
+
+    setState(() {
+      if (emailValid) {
+        isErrorEmail = false;
+      } else {
+        isErrorEmail = true;
+      }
+    });
+    setState(() {
+      if (passwordValid) {
+        isErrorPassword = false;
+      } else {
+        isErrorPassword = true;
+      }
+    });
+    setState(() {
+      if (cpasswordvalid) {
+        isErrorCPassword = false;
+      } else {
+        isErrorCPassword = true;
+      }
+    });
+
+    return fnameValid &&
+        surnameValid &&
+        emailValid &&
+        passwordValid &&
+        cpasswordvalid;
+  }
+
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width * 0.01;
@@ -28,8 +122,7 @@ class _CreateAccountState extends State<CreateAccount> {
           image: DecorationImage(
         fit: BoxFit.cover,
         image: AssetImage(bgimage3),
-        colorFilter:
-            ColorFilter.mode(primary.withOpacity(0.25), BlendMode.dstATop),
+        
       )),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -94,20 +187,13 @@ class _CreateAccountState extends State<CreateAccount> {
                                 height: _height * 7,
                                 width: _width * 42.5,
                                 lableText: "First Name",
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "Enter Value";
-                                  } else {
-                                    return "";
-                                  }
-                                },
                                 onChanged: (value) {
                                   setState(() {
-                                    //this.password = value;
+                                    this.fname = value;
                                   });
                                 },
                                 isObscureText: false,
-                                isError: false),
+                                isError: isErrorFname),
                             SizedBox(
                               width: _width * 5,
                             ),
@@ -115,20 +201,13 @@ class _CreateAccountState extends State<CreateAccount> {
                                 height: _height * 7,
                                 width: _width * 42.5,
                                 lableText: "Surname",
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "Enter Value";
-                                  } else {
-                                    return "";
-                                  }
-                                },
                                 onChanged: (value) {
                                   setState(() {
-                                    //this.password = value;
+                                    this.surname = value;
                                   });
                                 },
                                 isObscureText: false,
-                                isError: false),
+                                isError: isErrorSurname),
                           ],
                         ),
                         Container(
@@ -136,7 +215,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           child: Row(
                             children: [
                               ErrorTextField(
-                                  isError: false,
+                                  isError: isErrorFname,
                                   width: _width * 40,
                                   height: 20,
                                   errorText: "Enter First Name"),
@@ -144,7 +223,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                 width: _width * 5,
                               ),
                               ErrorTextField(
-                                  isError: false,
+                                  isError: isErrorSurname,
                                   width: _width * 40,
                                   height: 20,
                                   errorText: "Enter Surname"),
@@ -155,45 +234,31 @@ class _CreateAccountState extends State<CreateAccount> {
                             height: _height * 7,
                             width: _width * 90,
                             lableText: "Email Address",
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Enter Value";
-                              } else {
-                                return "";
-                              }
-                            },
                             onChanged: (value) {
                               setState(() {
-                                //this.password = value;
+                                this.email = value;
                               });
                             },
                             isObscureText: false,
-                            isError: false),
+                            isError: isErrorEmail),
                         ErrorTextField(
-                            isError: false,
+                            isError: isErrorEmail,
                             width: _width * 85,
                             height: 20,
-                            errorText: "Enter valid email address "),
+                            errorText: "Enter Surname"),
                         CustomTextFeild(
                             height: _height * 7,
                             width: _width * 90,
                             lableText: "New Password",
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Enter Value";
-                              } else {
-                                return "";
-                              }
-                            },
                             onChanged: (value) {
                               setState(() {
-                                //this.password = value;
+                                this.password = value;
                               });
                             },
                             isObscureText: true,
-                            isError: false),
+                            isError: isErrorPassword),
                         ErrorTextField(
-                            isError: false,
+                            isError: isErrorPassword,
                             width: _width * 85,
                             height: 20,
                             errorText: "Enter valid password"),
@@ -201,22 +266,15 @@ class _CreateAccountState extends State<CreateAccount> {
                             height: _height * 7,
                             width: _width * 90,
                             lableText: "Confirm Password",
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Enter Value";
-                              } else {
-                                return "";
-                              }
-                            },
                             onChanged: (value) {
                               setState(() {
-                                //this.password = value;
+                                this.cpassword = value;
                               });
                             },
                             isObscureText: true,
-                            isError: false),
+                            isError: isErrorCPassword),
                         ErrorTextField(
-                            isError: false,
+                            isError: isErrorCPassword,
                             width: _width * 85,
                             height: 20,
                             errorText: "Enter valid confirm Password"),
@@ -229,9 +287,12 @@ class _CreateAccountState extends State<CreateAccount> {
                   CustomButton(
                     width: _width * 90,
                     height: _height * 7,
-                    lableText: "Sign uo",
+                    lableText: "Sign up",
                     onPressed: () {
-                      Get.to(() => Step01CreateAccount());
+                      validateForm()
+                          ? Get.toNamed(
+                              RouteHelper.getStep01CreateAccountRoute())
+                          : null;
                     },
                   ),
                   SizedBox(
@@ -247,12 +308,17 @@ class _CreateAccountState extends State<CreateAccount> {
                   SizedBox(
                     height: 5,
                   ),
-                  Text(
-                    "Sign In",
-                    style: GoogleFonts.mulish(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(RouteHelper.getSIgnInRoute());
+                    },
+                    child: Text(
+                      "Sign In",
+                      style: GoogleFonts.mulish(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700),
+                    ),
                   ),
                 ],
               ),

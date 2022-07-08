@@ -6,22 +6,22 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:levelup/util/color.dart';
 
 class CustormTextFieldSuffix extends StatefulWidget {
-  CustormTextFieldSuffix({
-    Key? key,
-    required this.height,
-    required this.widthContainer,
-    required this.widthTextField,
-    required this.onChanged,
-    required this.suffixText,
-  }) : super(
-          key: key,
-        );
-
   double height;
   double widthContainer;
   double widthTextField;
-  String Function(String value) onChanged;
+  final String? Function(String value) onChanged;
+  final TextEditingController? controller;
+  final TextInputType? textInputType;
   String suffixText;
+  CustormTextFieldSuffix({
+    required this.height,
+    required this.widthContainer,
+    required this.widthTextField,
+    this.controller,
+    this.textInputType,
+    required this.onChanged,
+    required this.suffixText,
+  });
 
   @override
   State<CustormTextFieldSuffix> createState() => _CustormTextFieldSuffixState();
@@ -46,6 +46,8 @@ class _CustormTextFieldSuffixState extends State<CustormTextFieldSuffix> {
             width: widget.widthTextField,
             child: TextFormField(
               cursorColor: white,
+              controller: widget.controller,
+              keyboardType: widget.textInputType,
               textAlign: TextAlign.start,
               style: GoogleFonts.mulish(
                   fontSize: 16, color: white, fontWeight: FontWeight.w700),

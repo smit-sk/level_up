@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
+import 'package:levelup/helper/routeHelper.dart';
 import 'package:levelup/util/images.dart';
-import 'package:levelup/view/screens/Auth/SignInCreate.dart';
+import 'package:levelup/view/screens/Auth/Sign%20In/SignInCreate.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -15,10 +17,8 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   void initState() {
-    Timer(
-        Duration(seconds: 3),
-        () => Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => SignInCreate())));
+    Timer(Duration(seconds: 3),
+        () => Get.offAllNamed(RouteHelper.getSignInCreateAccountRoute()));
   }
 
   @override

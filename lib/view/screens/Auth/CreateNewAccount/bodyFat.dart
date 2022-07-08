@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:levelup/helper/routeHelper.dart';
 import 'package:levelup/util/color.dart';
 import 'package:levelup/util/images.dart';
 import 'package:levelup/view/base/BigCustomRadioButton.dart';
@@ -22,6 +23,14 @@ class BodyFat extends StatefulWidget {
 }
 
 class _BodyFatState extends State<BodyFat> {
+  bool isUSstandard = false;
+  bool isMetric = true;
+
+  String _weight = "";
+  String _metricBodyfat = "";
+  String bodyFatUSft = "";
+  String bodyFatUSin = "";
+
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width * 0.01;
@@ -61,10 +70,15 @@ class _BodyFatState extends State<BodyFat> {
                 children: [
                   BigCustomRadioBUtton(
                       height: _height * 7,
-                      width: _width * 89,
-                      isSelectedUSstandard: true,
-                      isSelectedMatric: false,
-                      onTap: () {}),
+                      width: _width * 88,
+                      isSelectedUSstandard: isUSstandard,
+                      isSelectedMatric: isMetric,
+                      onTap: () {
+                        setState(() {
+                          isUSstandard = !isUSstandard;
+                          isMetric = !isMetric;
+                        });
+                      }),
                   SizedBox(
                     height: 20,
                   ),
@@ -83,10 +97,12 @@ class _BodyFatState extends State<BodyFat> {
                   ),
                   CustormTextFieldSuffix(
                       height: _height * 7,
-                      widthContainer: _width * 90,
-                      widthTextField: _width * 70,
+                      widthContainer: _width * 88,
+                      widthTextField: _width * 68,
                       onChanged: (value) {
-                        return "";
+                        setState(() {
+                          this._weight = value;
+                        });
                       },
                       suffixText: "kg"),
                   SizedBox(
@@ -105,40 +121,44 @@ class _BodyFatState extends State<BodyFat> {
                   SizedBox(
                     height: 20,
                   ),
-                  CustormTextFieldSuffix(
-                      height: _height * 7,
-                      widthContainer: _width * 90,
-                      widthTextField: _width * 70,
-                      onChanged: (value) {
-                        return "";
-                      },
-                      suffixText: "%"),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      CustormTextFieldSuffix(
+                  isMetric
+                      ? CustormTextFieldSuffix(
                           height: _height * 7,
-                          widthContainer: _width * 42,
-                          widthTextField: _width * 20,
+                          widthContainer: _width * 88,
+                          widthTextField: _width * 68,
                           onChanged: (value) {
-                            return "";
+                            setState(() {
+                              this._metricBodyfat = value;
+                            });
                           },
-                          suffixText: "ft"),
-                      SizedBox(
-                        width: _width * 5,
-                      ),
-                      CustormTextFieldSuffix(
-                          height: _height * 7,
-                          widthContainer: _width * 42,
-                          widthTextField: _width * 20,
-                          onChanged: (value) {
-                            return "";
-                          },
-                          suffixText: "in"),
-                    ],
-                  ),
+                          suffixText: "%")
+                      : Row(
+                          children: [
+                            CustormTextFieldSuffix(
+                                height: _height * 7,
+                                widthContainer: _width * 41,
+                                widthTextField: _width * 20,
+                                onChanged: (value) {
+                                  setState(() {
+                                    this.bodyFatUSft = value;
+                                  });
+                                },
+                                suffixText: "ft"),
+                            SizedBox(
+                              width: _width * 5,
+                            ),
+                            CustormTextFieldSuffix(
+                                height: _height * 7,
+                                widthContainer: _width * 41,
+                                widthTextField: _width * 20,
+                                onChanged: (value) {
+                                  setState(() {
+                                    this.bodyFatUSft = value;
+                                  });
+                                },
+                                suffixText: "in"),
+                          ],
+                        ),
                   SizedBox(
                     height: 40,
                   ),
@@ -147,7 +167,7 @@ class _BodyFatState extends State<BodyFat> {
                       height: _height * 7,
                       lableText: "Continue",
                       onPressed: () {
-                        Get.to(()=> ResultCA() );
+                        Get.toNamed(RouteHelper.getResultCreateAccountRoute());
                       }),
                   SizedBox(
                     height: 20,

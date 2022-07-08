@@ -6,24 +6,25 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:levelup/util/color.dart';
 
 class CustomTextFeild extends StatefulWidget {
-  const CustomTextFeild({
-    Key? key,
-    required this.height,
-    required this.width,
-    required this.lableText,
-    required this.onChanged,
-    required this.validator,
-    required this.isObscureText,
-    required this.isError,
-  }) : super(key: key);
-
+  TextEditingController? controller;
+  TextInputType? textInputType;
   final double height;
   final double width;
   final String lableText;
   final String? Function(String value) onChanged;
-  final String Function(String? value) validator;
   final bool isObscureText;
   final bool isError;
+
+  CustomTextFeild({
+    required this.height,
+    required this.width,
+    required this.lableText,
+    required this.onChanged,
+    this.controller,
+    this.textInputType,
+    required this.isObscureText,
+    required this.isError,
+  });
 
   @override
   State<CustomTextFeild> createState() => _CustomTextFeildState();
@@ -42,12 +43,12 @@ class _CustomTextFeildState extends State<CustomTextFeild> {
           border: Border.all(color: widget.isError ? Colors.red : grey)),
       child: TextFormField(
         cursorColor: white,
+        controller: widget.controller,
+        keyboardType: widget.textInputType,
         textAlign: TextAlign.start,
         style: GoogleFonts.mulish(
             fontSize: 16, color: white, fontWeight: FontWeight.w700),
         obscureText: widget.isObscureText,
-        obscuringCharacter: "*",
-        validator: widget.validator,
         onChanged: widget.onChanged,
         decoration: InputDecoration(
           labelText: widget.lableText,

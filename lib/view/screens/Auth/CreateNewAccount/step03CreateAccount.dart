@@ -18,6 +18,8 @@ import 'package:levelup/view/base/ErrorTextField.dart';
 import 'package:levelup/view/screens/Auth/CreateNewAccount/step04CreateAccount.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
+import '../../../../helper/routeHelper.dart';
+
 class Step03CreateAccount extends StatefulWidget {
   const Step03CreateAccount({Key? key}) : super(key: key);
 
@@ -29,43 +31,44 @@ class step03item {
   final String heading;
   final String text;
   final String icon;
-  bool isSelected;
-  step03item(
-      {required this.heading,
-      required this.text,
-      required this.icon,
-      required this.isSelected});
+
+  step03item({
+    required this.heading,
+    required this.text,
+    required this.icon,
+  });
 }
 
 class _Step03CreateAccountState extends State<Step03CreateAccount> {
+  int _selectedindex = 1;
   List<step03item> step03itemDataList = [
     step03item(
-        heading: "Lightly Active",
-        text: "Little to no exercise.",
-        icon: lightIcon,
-        isSelected: true),
+      heading: "Lightly Active",
+      text: "Little to no exercise.",
+      icon: lightIcon,
+    ),
     step03item(
-        heading: "Light",
-        text:
-            "1-2 hours per week, comfortable, easy breathing, low muscle load, light sweating",
-        icon: veryLightIcon,
-        isSelected: false),
+      heading: "Light",
+      text:
+          "1-2 hours per week, comfortable, easy breathing, low muscle load, light sweating",
+      icon: veryLightIcon,
+    ),
     step03item(
-        heading: "Moderate",
-        text:
-            "3-4 hours per week, Light muscular fatigue, easy breathing, moderate sweating",
-        icon: moderateIcon,
-        isSelected: false),
+      heading: "Moderate",
+      text:
+          "3-4 hours per week, Light muscular fatigue, easy breathing, moderate sweating",
+      icon: moderateIcon,
+    ),
     step03item(
-        heading: "Hard",
-        text: "4-5 hours per week, Muscular fatigue and heavy breathing",
-        icon: hardIcon,
-        isSelected: false),
+      heading: "Hard",
+      text: "4-5 hours per week, Muscular fatigue and heavy breathing",
+      icon: hardIcon,
+    ),
     step03item(
-        heading: "Very Hard",
-        text: "6+ hours per week, Very exhausting for breathing and muscles.",
-        icon: veryhardIcon,
-        isSelected: false),
+      heading: "Very Hard",
+      text: "6+ hours per week, Very exhausting for breathing and muscles.",
+      icon: veryhardIcon,
+    ),
   ];
 
   @override
@@ -77,8 +80,6 @@ class _Step03CreateAccountState extends State<Step03CreateAccount> {
           image: DecorationImage(
         fit: BoxFit.cover,
         image: AssetImage(bgimage7),
-        colorFilter:
-            ColorFilter.mode(primary.withOpacity(0.25), BlendMode.dstATop),
       )),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -180,9 +181,7 @@ class _Step03CreateAccountState extends State<Step03CreateAccount> {
                                   return GestureDetector(
                                     onTap: () {
                                       setState(() {
-                                        step03itemDataList[index].isSelected =
-                                            !step03itemDataList[index]
-                                                .isSelected;
+                                        _selectedindex = index;
                                       });
                                     },
                                     child: Container(
@@ -195,8 +194,7 @@ class _Step03CreateAccountState extends State<Step03CreateAccount> {
                                             width: _width * 10,
                                             child: SvgPicture.asset(
                                               step03itemDataList[index].icon,
-                                              color: step03itemDataList[index]
-                                                      .isSelected
+                                              color: _selectedindex == index
                                                   ? primary
                                                   : white,
                                             ),
@@ -216,9 +214,8 @@ class _Step03CreateAccountState extends State<Step03CreateAccount> {
                                                       fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.w700,
-                                                      color: step03itemDataList[
-                                                                  index]
-                                                              .isSelected
+                                                      color: _selectedindex ==
+                                                              index
                                                           ? primary
                                                           : white),
                                                 ),
@@ -231,9 +228,8 @@ class _Step03CreateAccountState extends State<Step03CreateAccount> {
                                                       fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w500,
-                                                      color: step03itemDataList[
-                                                                  index]
-                                                              .isSelected
+                                                      color: _selectedindex ==
+                                                              index
                                                           ? primary
                                                           : lightgrey),
                                                 ),
@@ -243,8 +239,7 @@ class _Step03CreateAccountState extends State<Step03CreateAccount> {
                                         ],
                                       ),
                                       decoration: BoxDecoration(
-                                          color: step03itemDataList[index]
-                                                  .isSelected
+                                          color: _selectedindex == index
                                               ? white
                                               : transperant,
                                           borderRadius:
@@ -262,7 +257,8 @@ class _Step03CreateAccountState extends State<Step03CreateAccount> {
                                   height: _height * 7,
                                   lableText: "Next",
                                   onPressed: () {
-                                    Get.to(() => Step04CreateAccount());
+                                    Get.toNamed(RouteHelper
+                                        .getStep04CreateAccountRoute());
                                   }),
                             ),
                             SizedBox(

@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:levelup/helper/routeHelper.dart';
 import 'package:levelup/util/color.dart';
 import 'package:levelup/util/decoration.dart';
 import 'package:levelup/util/images.dart';
@@ -21,6 +22,39 @@ class WeighIn extends StatefulWidget {
 }
 
 class _WeighInState extends State<WeighIn> {
+  bool isUSstandard = false;
+  bool isMetric = true;
+
+  String weight = "";
+  String neckMetric = "";
+  String waistMetric = "";
+
+  String neckft = "";
+  String neckin = "";
+
+  String waistft = "";
+  String waistin = "";
+
+  TextEditingController _weightController = TextEditingController();
+  TextEditingController _neckMetricController = TextEditingController();
+  TextEditingController _waistMetricController = TextEditingController();
+
+  TextEditingController _neckftController = TextEditingController();
+  TextEditingController _neckinController = TextEditingController();
+  TextEditingController _waistftController = TextEditingController();
+  TextEditingController _waistinController = TextEditingController();
+
+  void dispose() {
+    _weightController.dispose();
+    _neckMetricController.dispose();
+    _waistMetricController.dispose();
+
+    _neckftController.dispose();
+    _neckinController.dispose();
+    _waistftController.dispose();
+    _waistinController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width * 0.01;
@@ -60,10 +94,15 @@ class _WeighInState extends State<WeighIn> {
                 children: [
                   BigCustomRadioBUtton(
                       height: _height * 7,
-                      width: _width * 89,
-                      isSelectedUSstandard: true,
-                      isSelectedMatric: false,
-                      onTap: () {}),
+                      width: _width * 88,
+                      isSelectedUSstandard: isUSstandard,
+                      isSelectedMatric: isMetric,
+                      onTap: () {
+                        setState(() {
+                          isUSstandard = !isUSstandard;
+                          isMetric = !isMetric;
+                        });
+                      }),
                   SizedBox(
                     height: 20,
                   ),
@@ -83,11 +122,15 @@ class _WeighInState extends State<WeighIn> {
                   CustormTextFieldSuffix(
                       height: _height * 7,
                       widthContainer: _width * 90,
-                      widthTextField: _width * 70,
+                      widthTextField: _width * 60,
+                      controller: _weightController,
+                      textInputType: TextInputType.number,
                       onChanged: (value) {
-                        return "";
+                        setState(() {
+                          this.weight = value;
+                        });
                       },
-                      suffixText: "kg"),
+                      suffixText: isUSstandard ? "pounds" : "kg"),
                   SizedBox(
                     height: 20,
                   ),
@@ -104,40 +147,50 @@ class _WeighInState extends State<WeighIn> {
                   SizedBox(
                     height: 20,
                   ),
-                  CustormTextFieldSuffix(
-                      height: _height * 7,
-                      widthContainer: _width * 90,
-                      widthTextField: _width * 70,
-                      onChanged: (value) {
-                        return "";
-                      },
-                      suffixText: "cm"),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      CustormTextFieldSuffix(
+                  isMetric
+                      ? CustormTextFieldSuffix(
                           height: _height * 7,
-                          widthContainer: _width * 42,
-                          widthTextField: _width * 20,
+                          widthContainer: _width * 90,
+                          widthTextField: _width * 70,
+                          controller: _neckMetricController,
+                          textInputType: TextInputType.number,
                           onChanged: (value) {
-                            return "";
+                            setState(() {
+                              this.neckMetric = value;
+                            });
                           },
-                          suffixText: "ft"),
-                      SizedBox(
-                        width: _width * 5,
-                      ),
-                      CustormTextFieldSuffix(
-                          height: _height * 7,
-                          widthContainer: _width * 42,
-                          widthTextField: _width * 20,
-                          onChanged: (value) {
-                            return "";
-                          },
-                          suffixText: "in"),
-                    ],
-                  ),
+                          suffixText: "cm")
+                      : Row(
+                          children: [
+                            CustormTextFieldSuffix(
+                                height: _height * 7,
+                                widthContainer: _width * 41,
+                                widthTextField: _width * 20,
+                                controller: _neckftController,
+                                textInputType: TextInputType.number,
+                                onChanged: (value) {
+                                  setState(() {
+                                    this.neckft = value;
+                                  });
+                                },
+                                suffixText: "ft"),
+                            SizedBox(
+                              width: _width * 5,
+                            ),
+                            CustormTextFieldSuffix(
+                                height: _height * 7,
+                                widthContainer: _width * 41,
+                                widthTextField: _width * 20,
+                                controller: _neckinController,
+                                textInputType: TextInputType.number,
+                                onChanged: (value) {
+                                  setState(() {
+                                    this.neckin = value;
+                                  });
+                                },
+                                suffixText: "in"),
+                          ],
+                        ),
                   SizedBox(
                     height: 20,
                   ),
@@ -154,40 +207,50 @@ class _WeighInState extends State<WeighIn> {
                   SizedBox(
                     height: 20,
                   ),
-                  CustormTextFieldSuffix(
-                      height: _height * 7,
-                      widthContainer: _width * 90,
-                      widthTextField: _width * 70,
-                      onChanged: (value) {
-                        return "";
-                      },
-                      suffixText: "cm"),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      CustormTextFieldSuffix(
+                  isMetric
+                      ? CustormTextFieldSuffix(
                           height: _height * 7,
-                          widthContainer: _width * 42,
-                          widthTextField: _width * 20,
+                          widthContainer: _width * 90,
+                          widthTextField: _width * 70,
+                          controller: _waistMetricController,
+                          textInputType: TextInputType.number,
                           onChanged: (value) {
-                            return "";
+                            setState(() {
+                              this.waistMetric = value;
+                            });
                           },
-                          suffixText: "ft"),
-                      SizedBox(
-                        width: _width * 5,
-                      ),
-                      CustormTextFieldSuffix(
-                          height: _height * 7,
-                          widthContainer: _width * 42,
-                          widthTextField: _width * 20,
-                          onChanged: (value) {
-                            return "";
-                          },
-                          suffixText: "in"),
-                    ],
-                  ),
+                          suffixText: "cm")
+                      : Row(
+                          children: [
+                            CustormTextFieldSuffix(
+                                height: _height * 7,
+                                widthContainer: _width * 41,
+                                widthTextField: _width * 20,
+                                controller: _waistftController,
+                                textInputType: TextInputType.number,
+                                onChanged: (value) {
+                                  setState(() {
+                                    this.waistft = value;
+                                  });
+                                },
+                                suffixText: "ft"),
+                            SizedBox(
+                              width: _width * 5,
+                            ),
+                            CustormTextFieldSuffix(
+                                height: _height * 7,
+                                widthContainer: _width * 41,
+                                widthTextField: _width * 20,
+                                controller: _waistinController,
+                                textInputType: TextInputType.number,
+                                onChanged: (value) {
+                                  setState(() {
+                                    this.waistin = value;
+                                  });
+                                },
+                                suffixText: "in"),
+                          ],
+                        ),
                   SizedBox(
                     height: 40,
                   ),
@@ -196,17 +259,31 @@ class _WeighInState extends State<WeighIn> {
                       height: _height * 7,
                       lableText: "Calculate",
                       onPressed: () {
-                        Get.to(BodyFat());
+                        Get.toNamed(RouteHelper.getBodyFatCreateAccountRoute());
                       }),
                   SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    "Clear",
-                    style: GoogleFonts.mulish(
-                      fontSize: 16,
-                      color: white,
-                      fontWeight: FontWeight.w700,
+                  GestureDetector(
+                    onTap: () {
+                      //setState(() {
+                      _weightController.clear();
+                      _neckMetricController.clear();
+                      _waistMetricController.clear();
+
+                      _neckftController.clear();
+                      _neckinController.clear();
+                      _waistftController.clear();
+                      _waistinController.clear();
+                      //});
+                    },
+                    child: Text(
+                      "Clear",
+                      style: GoogleFonts.mulish(
+                        fontSize: 16,
+                        color: white,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   )
                 ],

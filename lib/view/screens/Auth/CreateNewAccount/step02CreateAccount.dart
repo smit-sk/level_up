@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:levelup/helper/routeHelper.dart';
 import 'package:levelup/util/color.dart';
 import 'package:levelup/util/decoration.dart';
 import 'package:levelup/util/images.dart';
@@ -31,39 +32,41 @@ class step02item {
   final String heading;
   final String text;
   final String icon;
-  bool isSelected;
-  step02item(
-      {required this.heading,
-      required this.text,
-      required this.icon,
-      required this.isSelected});
+
+  step02item({
+    required this.heading,
+    required this.text,
+    required this.icon,
+  });
 }
 
 class _Step02CreateAccountState extends State<Step02CreateAccount> {
+  int _selectedIndex = 1;
+
   List<step02item> step02itemDataList = [
     step02item(
-        heading: "Not Very Active",
-        text: "Spend most of the day sitting\n(Eg. Desk job)",
-        icon: notVeryActiveIcon,
-        isSelected: false),
+      heading: "Not Very Active",
+      text: "Spend most of the day sitting\n(Eg. Desk job)",
+      icon: notVeryActiveIcon,
+    ),
     step02item(
-        heading: "Lightly Active",
-        text:
-            "Spend a good part of the day on your feet (E.g. Real estate agent, hair stylist) ",
-        icon: lightlyActiveIcon,
-        isSelected: true),
+      heading: "Lightly Active",
+      text:
+          "Spend a good part of the day on your feet (E.g. Real estate agent, hair stylist) ",
+      icon: lightlyActiveIcon,
+    ),
     step02item(
-        heading: "Active",
-        text:
-            "Spend a good part of the day doing some physical activity (E.g. Food server, Teacher)",
-        icon: activeIcon,
-        isSelected: false),
+      heading: "Active",
+      text:
+          "Spend a good part of the day doing some physical activity (E.g. Food server, Teacher)",
+      icon: activeIcon,
+    ),
     step02item(
-        heading: "Very Active",
-        text:
-            "Spend a good part of the day doing heavy physical activity (E.g. Construction worker, postal worker)",
-        icon: veryActiveIcon,
-        isSelected: false)
+      heading: "Very Active",
+      text:
+          "Spend a good part of the day doing heavy physical activity (E.g. Construction worker, postal worker)",
+      icon: veryActiveIcon,
+    )
   ];
 
   @override
@@ -75,8 +78,6 @@ class _Step02CreateAccountState extends State<Step02CreateAccount> {
           image: DecorationImage(
         fit: BoxFit.cover,
         image: AssetImage(bgimage6),
-        colorFilter:
-            ColorFilter.mode(primary.withOpacity(0.25), BlendMode.dstATop),
       )),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -178,10 +179,7 @@ class _Step02CreateAccountState extends State<Step02CreateAccount> {
                                   return GestureDetector(
                                     onTap: () {
                                       setState(() {
-                                        step02itemDataList[index].isSelected =
-                                            !step02itemDataList[index]
-                                                .isSelected;
-                                        // }
+                                        _selectedIndex = index;
                                       });
                                     },
                                     child: Container(
@@ -194,8 +192,7 @@ class _Step02CreateAccountState extends State<Step02CreateAccount> {
                                             width: _width * 10,
                                             child: SvgPicture.asset(
                                               step02itemDataList[index].icon,
-                                              color: step02itemDataList[index]
-                                                      .isSelected
+                                              color: _selectedIndex == index
                                                   ? primary
                                                   : white,
                                             ),
@@ -215,9 +212,8 @@ class _Step02CreateAccountState extends State<Step02CreateAccount> {
                                                       fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.w700,
-                                                      color: step02itemDataList[
-                                                                  index]
-                                                              .isSelected
+                                                      color: _selectedIndex ==
+                                                              index
                                                           ? primary
                                                           : white),
                                                 ),
@@ -231,9 +227,8 @@ class _Step02CreateAccountState extends State<Step02CreateAccount> {
                                                       fontSize: 14,
                                                       fontWeight:
                                                           FontWeight.w500,
-                                                      color: step02itemDataList[
-                                                                  index]
-                                                              .isSelected
+                                                      color: _selectedIndex ==
+                                                              index
                                                           ? primary
                                                           : lightgrey),
                                                 ),
@@ -243,8 +238,7 @@ class _Step02CreateAccountState extends State<Step02CreateAccount> {
                                         ],
                                       ),
                                       decoration: BoxDecoration(
-                                          color: step02itemDataList[index]
-                                                  .isSelected
+                                          color: _selectedIndex == index
                                               ? white
                                               : transperant,
                                           borderRadius:
@@ -262,8 +256,8 @@ class _Step02CreateAccountState extends State<Step02CreateAccount> {
                                   height: _height * 7,
                                   lableText: "Next",
                                   onPressed: () {
-                                    Get.to(() => Step03CreateAccount(),
-                                        transition: Transition.fade);
+                                    Get.toNamed(RouteHelper
+                                        .getStep03CreateAccountRoute());
                                   }),
                             ),
                             SizedBox(

@@ -11,8 +11,11 @@ import 'package:levelup/util/decoration.dart';
 import 'package:levelup/util/images.dart';
 import 'package:levelup/view/base/BigCustomRadioButton.dart';
 import 'package:levelup/view/base/CustomButton.dart';
+import 'package:levelup/view/base/CustomTextFieldSuffix.dart';
 import 'package:levelup/view/screens/Auth/CreateNewAccount/weighIn.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+
+import '../../../../helper/routeHelper.dart';
 
 class Step04CreateAccount extends StatefulWidget {
   const Step04CreateAccount({Key? key}) : super(key: key);
@@ -22,6 +25,14 @@ class Step04CreateAccount extends StatefulWidget {
 }
 
 class _Step04CreateAccountState extends State<Step04CreateAccount> {
+  bool isUSstandard = true;
+  bool isMetric = false;
+
+  String height = "";
+
+  
+
+
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width * 0.01;
@@ -140,58 +151,27 @@ class _Step04CreateAccountState extends State<Step04CreateAccount> {
                         BigCustomRadioBUtton(
                             height: _height * 7,
                             width: _width * 85,
-                            isSelectedUSstandard: true,
-                            isSelectedMatric: false,
-                            onTap: () {}),
+                            isSelectedUSstandard: isUSstandard,
+                            isSelectedMatric: isMetric,
+                            onTap: () {
+                              setState(() {
+                                isUSstandard = !isUSstandard;
+                                isMetric = !isMetric;
+                              });
+                            }),
                         SizedBox(
                           height: 20,
                         ),
-                        Container(
-                          width: _width * 85,
-                          height: _height * 7,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: grey)),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding:
-                                    EdgeInsets.symmetric(vertical: _height * 2),
-                                width: _width * 65,
-                                child: TextFormField(
-                                  cursorColor: white,
-                                  textAlign: TextAlign.start,
-                                  style: GoogleFonts.mulish(
-                                      fontSize: 16,
-                                      color: white,
-                                      fontWeight: FontWeight.w700),
-                                  onChanged: (value) {},
-                                  decoration: InputDecoration(
-                                    fillColor: Colors.transparent,
-                                    contentPadding: EdgeInsets.all(13),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: transperant),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: transperant),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                child: Text("lbs/kg",
-                                    style: GoogleFonts.mulish(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w700,
-                                        color: white)),
-                              )
-                            ],
-                          ),
-                        ),
+                        CustormTextFieldSuffix(
+                            height: _height * 7,
+                            widthContainer: _width * 85,
+                            widthTextField: _width * 60,
+                            onChanged: (value) {
+                              setState(() {
+                                this.height = value;
+                              });
+                            },
+                            suffixText: isUSstandard ? "lbs" : "kg"),
                         SizedBox(
                           height: 20,
                         ),
@@ -298,7 +278,8 @@ class _Step04CreateAccountState extends State<Step04CreateAccount> {
                               height: _height * 7,
                               lableText: "Next",
                               onPressed: () {
-                                Get.to(() => WeighIn());
+                                Get.toNamed(
+                                    RouteHelper.getWeighInCreateAccountRoute());
                               }),
                         ),
                         SizedBox(

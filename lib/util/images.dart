@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 final String bgimage = "assets/images/bg.png";
+final String bgimage0 = "assets/images/bg1.png";
 final String bgimage1 = "assets/images/bg2.png";
 final String bgimage2 = "assets/images/bg3.png";
 final String bgimage3 = "assets/images/bg4.png";
@@ -34,5 +35,21 @@ final String colorBarWoManFUll = 'assets/images/female_color_bar.png';
 
 final String alertImage = 'assets/images/rectangle.png';
 
+final String purpleBox = 'assets/images/purplebox.png';
+final String greenBox = 'assets/images/greenbox.png';
+final String yellowBox = 'assets/images/yellowbox.png';
+
+final String purpleBoxSvg = 'assets/images/purpleboxsvg.svg';
+final String greenBoxSvg = 'assets/images/greenboxsvg.svg';
+final String yellowBoxSvg = 'assets/images/yellowboxsvg.svg';
+
+final String mealplan = 'assets/images/mealplan.svg';
+final String foodsRecipendMeals = 'assets/images/foods.svg';
+final String createRecipe = 'assets/images/createrecipe.svg';
+final String addWeighIn = 'assets/images/addweighin.svg';
+final String profile = 'assets/images/profile.svg';
+
 final String logo = "assets/images/logo.png";
 final String resetDone = "assets/images/resetDone.png";
+
+final String mealPlanBG = 'assets/images/mealPlanBG.png';
