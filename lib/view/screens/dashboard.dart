@@ -98,7 +98,9 @@ class Dashboard extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                     // Get.to(Test());
+                    },
                     child: Container(
                       margin: EdgeInsets.fromLTRB(
                           _width * 2.5, _height * 2, _width * 2.5, 10),
