@@ -13,6 +13,8 @@ import 'package:levelup/view/screens/Auth/Sign%20In/SignInCreate.dart';
 import 'package:levelup/view/screens/Auth/Sign%20In/resetPassword.dart';
 import 'package:levelup/view/screens/Auth/Sign%20In/resetPasswordDone.dart';
 import 'package:levelup/view/screens/Auth/Sign%20In/signIn.dart';
+import 'package:levelup/view/screens/Meal%20Plan/EditFood.dart';
+import 'package:levelup/view/screens/Meal%20Plan/EditRecipe.dart';
 import 'package:levelup/view/screens/Meal%20Plan/MealPan.dart';
 import 'package:levelup/view/screens/dashboard.dart';
 import 'package:levelup/view/screens/splashScreen.dart';
@@ -42,6 +44,8 @@ class RouteHelper {
   static const String dashboard = '/dashboard';
 
   static const String mealPlan = '/meal-plan';
+  static const String editfoodMealPlan = '/edit-food-mealplan';
+  static const String editrecipeMealPlan = '/edit-recipe-mealpaln';
 
   // static String getRoute() => '$';
   static String getInitialRoute() => initial;
@@ -64,6 +68,8 @@ class RouteHelper {
   static String getDashboardRoute() => '$dashboard';
 
   static String getMealPlanRoute() => '$mealPlan';
+  static String getEditFoodMealPlanRoute() => '$editfoodMealPlan';
+  static String getEditRecipeMealPlanRoute() => '$editrecipeMealPlan';
   // static String getRoute() => '$';
 
   static List<GetPage> routes = [
@@ -83,11 +89,11 @@ class RouteHelper {
     GetPage(name: bodyFatCreateAccount, page: () => BodyFat()),
     GetPage(name: resultCreateAccount, page: () => ResultCA()),
     GetPage(name: getStartedToApp, page: () => GetStartedCreateAccount()),
-
     GetPage(name: dashboard, page: () => Dashboard()),
-
     GetPage(name: mealPlan, page: () => MealPlan()),
-    //GetPage(name: , page: () => ),
+
+    GetPage(name: editfoodMealPlan, page: () => EditFood()),
+    GetPage(name: editrecipeMealPlan, page: () => EditRecipeMealPlan()),
     //GetPage(name: , page: () => ),
     //GetPage(name: , page: () => ),
     //GetPage(name: , page: () => ),

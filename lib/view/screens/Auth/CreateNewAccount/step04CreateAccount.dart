@@ -151,8 +151,10 @@ class _Step04CreateAccountState extends State<Step04CreateAccount> {
                         BigCustomRadioBUtton(
                             height: _height * 7,
                             width: _width * 85,
-                            isSelectedUSstandard: isUSstandard,
-                            isSelectedMatric: isMetric,
+                            isSelectedLeftText: isUSstandard,
+                      isSelectedRightText: isMetric,
+                      LeftText: "U.S. Standard",
+                      RightText: "Metric",
                             onTap: () {
                               setState(() {
                                 isUSstandard = !isUSstandard;

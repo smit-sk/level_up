@@ -4,19 +4,23 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:levelup/util/color.dart';
 
 class BigCustomRadioBUtton extends StatefulWidget {
-  const BigCustomRadioBUtton(
+  BigCustomRadioBUtton(
       {Key? key,
       required this.height,
       required this.width,
-      required this.isSelectedUSstandard,
-      required this.isSelectedMatric,
+      required this.isSelectedLeftText,
+      required this.isSelectedRightText,
+      required this.LeftText,
+      required this.RightText,
       required this.onTap})
       : super(key: key);
 
   final double height;
   final double width;
-  final bool isSelectedUSstandard;
-  final bool isSelectedMatric;
+  final bool isSelectedLeftText;
+  final bool isSelectedRightText;
+  final String LeftText;
+  final String RightText;
   final Function() onTap;
   @override
   State<BigCustomRadioBUtton> createState() => _BigCustomRadioBUttonState();
@@ -39,15 +43,15 @@ class _BigCustomRadioBUttonState extends State<BigCustomRadioBUtton> {
               width: (widget.width / 2) - 1,
               child: Center(
                 child: Text(
-                  "U.S.Standard",
+                  widget.LeftText,
                   style: GoogleFonts.mulish(
                       fontSize: 16,
-                      color: widget.isSelectedUSstandard ? primary : white,
+                      color: widget.isSelectedLeftText ? primary : white,
                       fontWeight: FontWeight.w700),
                 ),
               ),
               decoration: BoxDecoration(
-                color: widget.isSelectedUSstandard ? white : transperant,
+                color: widget.isSelectedLeftText ? white : transperant,
                 borderRadius: BorderRadius.circular(10),
                 //border: Border.all(color: lightgrey),
               ),
@@ -60,15 +64,15 @@ class _BigCustomRadioBUttonState extends State<BigCustomRadioBUtton> {
               width: (widget.width / 2) - 1,
               child: Center(
                 child: Text(
-                  "Metric",
+                  widget.RightText,
                   style: GoogleFonts.mulish(
                       fontSize: 16,
-                      color: widget.isSelectedMatric ? primary : white,
+                      color: widget.isSelectedRightText ? primary : white,
                       fontWeight: FontWeight.w700),
                 ),
               ),
               decoration: BoxDecoration(
-                color: widget.isSelectedMatric ? white : transperant,
+                color: widget.isSelectedRightText ? white : transperant,
                 borderRadius: BorderRadius.circular(10),
                 // border: Border.all(
                 //     color: widget.isSelectedMatric ? white : lightgrey),
@@ -78,8 +82,8 @@ class _BigCustomRadioBUttonState extends State<BigCustomRadioBUtton> {
         ],
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: lightgrey),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: white),
       ),
     );
   }

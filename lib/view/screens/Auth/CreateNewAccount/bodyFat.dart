@@ -1,9 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:levelup/helper/routeHelper.dart';
@@ -12,8 +8,6 @@ import 'package:levelup/util/images.dart';
 import 'package:levelup/view/base/BigCustomRadioButton.dart';
 import 'package:levelup/view/base/CustomButton.dart';
 import 'package:levelup/view/base/CustomTextFieldSuffix.dart';
-import 'package:levelup/view/screens/Auth/CreateNewAccount/result.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 
 class BodyFat extends StatefulWidget {
   const BodyFat({Key? key}) : super(key: key);
@@ -71,8 +65,10 @@ class _BodyFatState extends State<BodyFat> {
                   BigCustomRadioBUtton(
                       height: _height * 7,
                       width: _width * 88,
-                      isSelectedUSstandard: isUSstandard,
-                      isSelectedMatric: isMetric,
+                      isSelectedLeftText: isUSstandard,
+                      isSelectedRightText: isMetric,
+                      LeftText: "U.S. Standard",
+                      RightText: "Metric",
                       onTap: () {
                         setState(() {
                           isUSstandard = !isUSstandard;

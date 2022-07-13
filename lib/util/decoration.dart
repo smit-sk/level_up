@@ -47,3 +47,6 @@ final TextStyle mulish16900 = GoogleFonts.mulish(
 //Mulish -22
 final TextStyle mulish22800 = GoogleFonts.mulish(
     color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800);
+
+final TextStyle mulish22700 = GoogleFonts.mulish(
+    color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700);

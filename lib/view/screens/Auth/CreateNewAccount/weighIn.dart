@@ -95,8 +95,10 @@ class _WeighInState extends State<WeighIn> {
                   BigCustomRadioBUtton(
                       height: _height * 7,
                       width: _width * 88,
-                      isSelectedUSstandard: isUSstandard,
-                      isSelectedMatric: isMetric,
+                      isSelectedLeftText: isUSstandard,
+                      isSelectedRightText: isMetric,
+                      LeftText: "U.S. Standard",
+                      RightText: "Metric",
                       onTap: () {
                         setState(() {
                           isUSstandard = !isUSstandard;

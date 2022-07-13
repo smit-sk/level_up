@@ -17,7 +17,7 @@ class CustomButton extends StatefulWidget {
   final double width;
   final double height;
   final String lableText;
-  final  Function() onPressed;
+  final Function() onPressed;
   @override
   State<CustomButton> createState() => _CustomButtonState();
 }

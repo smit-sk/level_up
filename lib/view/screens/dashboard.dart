@@ -7,12 +7,15 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:levelup/controller/meal_plan_controller.dart';
 import 'package:levelup/helper/routeHelper.dart';
 import 'package:levelup/util/color.dart';
 import 'package:levelup/util/images.dart';
 
 class Dashboard extends StatelessWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  Dashboard({Key? key}) : super(key: key);
+
+  MealPlanController mealplanController = Get.put(MealPlanController());
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +102,7 @@ class Dashboard extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                     // Get.to(Test());
+                      // Get.to(Test());
                     },
                     child: Container(
                       margin: EdgeInsets.fromLTRB(

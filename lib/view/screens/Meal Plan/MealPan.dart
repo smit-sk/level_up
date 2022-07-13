@@ -1,16 +1,21 @@
-// ignore_for_file: sort_child_properties_last
+// ignore_for_file: sort_child_properties_last, prefer_const_constructors, prefer_final_fields
+import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:levelup/controller/meal_plan_controller.dart';
 import 'package:levelup/util/color.dart';
 import 'package:levelup/util/decoration.dart';
 import 'package:levelup/util/images.dart';
 import 'package:levelup/view/base/CustomButton.dart';
 import 'package:levelup/view/base/CustomToast.dart';
-import 'package:levelup/view/base/ExpansionContainer.dart';
-import 'package:levelup/view/base/IngrediansContainer.dart';
-
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:levelup/view/base/Meal%20Plan%20Base/ExpansionContainer.dart';
+import 'package:levelup/view/base/Meal%20Plan%20Base/IngrediansContainer.dart';
+import 'package:levelup/view/base/Meal%20Plan%20Base/calaryChart.dart';
+import 'package:levelup/view/base/Meal%20Plan%20Base/calaryTable.dart';
+import 'package:intl/intl.dart';
+import 'package:levelup/view/screens/Meal%20Plan/CopyDay.dart';
 
 class MealPlan extends StatefulWidget {
   const MealPlan({Key? key}) : super(key: key);
@@ -18,19 +23,40 @@ class MealPlan extends StatefulWidget {
   State<MealPlan> createState() => _MealPlanState();
 }
 
-class ChartData {
-  ChartData(this.x, this.y, [this.color]);
-  final String x;
-  final double y;
-  final Color? color;
-}
-
 class _MealPlanState extends State<MealPlan> {
-  final List<ChartData> chartData = [
-    ChartData('David', 35, Color(0xFF8912FB)),
-    ChartData('Steve', 60, Color(0xFFFEB13D)),
-    ChartData('Jack', 5, Color(0xFF2BB9B0)),
+  final List<CalaryChartData> chartData = [
+    CalaryChartData('Protein', 35, "135g", Color(0xFF8912FB)),
+    CalaryChartData('Carbs', 60, "547g", Color(0xFFFEB13D)),
+    CalaryChartData('Fat', 5, "265g", Color(0xFF2BB9B0)),
   ];
+
+  bool _breakfast = false;
+  bool _lunch = false;
+  bool _dinner = false;
+  int _selectedindex = 1;
+
+  bool isSelect = false;
+  ScrollController _scrollController = ScrollController();
+
+  List<DragAndDropList> _data = [
+    DragAndDropList(children: [
+      DragAndDropItem(
+          child: IngrediansContainer(
+        isSelected: true,
+        isDragable: true,
+      )),
+      DragAndDropItem(
+          child: IngrediansContainer(
+        isDragable: true,
+      )),
+      DragAndDropItem(
+          child: IngrediansContainer(
+        isDragable: true,
+      ))
+    ]),
+  ];
+
+  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width * 0.01;
@@ -43,6 +69,7 @@ class _MealPlanState extends State<MealPlan> {
             image: AssetImage(bgimage10),
           )),
       child: Scaffold(
+          key: _scaffoldkey,
           backgroundColor: transperant,
           appBar: AppBar(
             elevation: 0,
@@ -62,7 +89,10 @@ class _MealPlanState extends State<MealPlan> {
             actions: [
               IconButton(
                   onPressed: () {
-                    show(context, "hello hunny bunny ");
+                    _scaffoldkey.currentState!.showBottomSheet(
+                        (context) =>
+                            mealPlanBottomSheet(_height, _width, context),
+                        backgroundColor: transperant);
                   },
                   icon: Icon(
                     Icons.more_vert,
@@ -73,595 +103,364 @@ class _MealPlanState extends State<MealPlan> {
           ),
           body: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: _width * 5),
-              alignment: Alignment.center,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Daily Totals",
-                    style: GoogleFonts.mulish(
-                        fontSize: 22,
-                        color: white,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  SizedBox(
-                    height: _height * 2.5,
-                  ),
-                  Container(
-                    height: _height * 18,
-                    width: _width * 90,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: white),
-                      borderRadius: BorderRadius.circular(10),
+            child:
+                GetBuilder<MealPlanController>(builder: (mealplanController) {
+              return Container(
+                padding: EdgeInsets.symmetric(horizontal: _width * 5),
+                alignment: Alignment.center,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 100,
+                      child: ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: mealplanController.weekDateList.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(0, 20, 20, 30),
+                                padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: white,
+                                    )),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      mealplanController.weekDayList[index]
+                                          .toString(),
+                                      style: GoogleFonts.mulish(
+                                          fontSize: 16,
+                                          color: white,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    Text(
+                                      mealplanController.weekDateList[index]
+                                          .toString(),
+                                      style: GoogleFonts.mulish(
+                                          fontSize: 12,
+                                          color: white,
+                                          fontWeight: FontWeight.w600),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    Text(
+                      "Daily Totals",
+                      style: GoogleFonts.mulish(
+                          fontSize: 22,
+                          color: white,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      height: _height * 2.5,
+                    ),
+                    CalaryChart(
+                      data: chartData,
+                    ),
+                    SizedBox(
+                      height: _height * 2.5,
+                    ),
+                    Row(
                       children: [
-                        Container(
-                          width: _width * 35,
-                          child: SfCircularChart(
-                              annotations: <CircularChartAnnotation>[
-                                CircularChartAnnotation(
-                                    widget: Container(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "3564",
-                                        style: GoogleFonts.mulish(
-                                          color: white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w800,
-                                        ),
-                                      ),
-                                      Text(
-                                        "Cal",
-                                        style: GoogleFonts.mulish(
-                                          color: white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ))
-                              ],
-                              series: <CircularSeries>[
-                                DoughnutSeries<ChartData, String>(
-                                    dataSource: chartData,
-                                    pointColorMapper: (ChartData data, _) =>
-                                        data.color,
-                                    xValueMapper: (ChartData data, _) => data.x,
-                                    yValueMapper: (ChartData data, _) => data.y,
-                                    cornerStyle: CornerStyle.bothCurve,
-                                    innerRadius: '80%',
-                                    radius: '85%'),
-                              ]),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(top: _height * 3),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                "35 %",
-                                style: GoogleFonts.mulish(
-                                    color: primary,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              SizedBox(
-                                height: _height * 2,
-                              ),
-                              Text(
-                                "135 g",
-                                style: GoogleFonts.mulish(
-                                    color: white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800),
-                              ),
-                              SizedBox(
-                                height: _height * 2,
-                              ),
-                              Text(
-                                "Protein",
-                                style: GoogleFonts.mulish(
-                                    color: white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(top: _height * 3),
-                          child: Column(
-                            children: [
-                              Text(
-                                "5%",
-                                style: GoogleFonts.mulish(
-                                    color: pgreen,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              SizedBox(
-                                height: _height * 2,
-                              ),
-                              Text(
-                                "135 g",
-                                style: GoogleFonts.mulish(
-                                    color: white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800),
-                              ),
-                              SizedBox(
-                                height: _height * 2,
-                              ),
-                              Text(
-                                "Carbs",
-                                style: GoogleFonts.mulish(
-                                    color: white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(top: _height * 3),
-                          child: Column(
-                            children: [
-                              Text(
-                                "60%",
-                                style: GoogleFonts.mulish(
-                                    color: pyellow,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              SizedBox(
-                                height: _height * 2,
-                              ),
-                              Text(
-                                "135 g",
-                                style: GoogleFonts.mulish(
-                                    color: white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800),
-                              ),
-                              SizedBox(
-                                height: _height * 2,
-                              ),
-                              Text(
-                                "Fat",
-                                style: GoogleFonts.mulish(
-                                    color: white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
+                        Text(
+                          "BreakFast",
+                          style: GoogleFonts.mulish(
+                              fontSize: 22,
+                              color: white,
+                              fontWeight: FontWeight.w700),
                         ),
                         SizedBox(
                           width: 10,
                         ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _breakfast = !_breakfast;
+                            });
+                          },
+                          child: Container(
+                            height: _height * 2.5,
+                            width: _width * 5,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: white, width: 2),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Icon(
+                              Icons.question_mark_outlined,
+                              color: white,
+                              size: 14,
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: SizedBox(),
+                          fit: FlexFit.tight,
+                        ),
+                        Text(
+                          "1595 ",
+                          style: GoogleFonts.mulish(
+                              fontSize: 16,
+                              color: white,
+                              fontWeight: FontWeight.w800),
+                        ),
+                        Text(
+                          "Cal",
+                          style: GoogleFonts.mulish(
+                              fontSize: 16,
+                              color: white,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    height: _height * 2.5,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "BreakFast",
-                        style: GoogleFonts.mulish(
-                            fontSize: 22,
-                            color: white,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        height: _height * 2.5,
-                        width: _width * 5,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: white, width: 2),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Icon(
-                          Icons.question_mark_outlined,
-                          color: white,
-                          size: 14,
-                        ),
-                      ),
-                      Flexible(
-                        child: SizedBox(),
-                        fit: FlexFit.tight,
-                      ),
-                      Text(
-                        "1595 ",
-                        style: GoogleFonts.mulish(
-                            fontSize: 16,
-                            color: white,
-                            fontWeight: FontWeight.w800),
-                      ),
-                      Text(
-                        "Cal",
-                        style: GoogleFonts.mulish(
-                            fontSize: 16,
-                            color: white,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: _height * 2.5,
-                  ),
-                  IngrediansContainer(),
-                  SizedBox(
-                    height: _height * 2.5,
-                  ),
-                  ExpansionContainer(),
-                  SizedBox(
-                    height: _height * 2.5,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Lunch",
-                        style: GoogleFonts.mulish(
-                            fontSize: 22,
-                            color: white,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        height: _height * 2.5,
-                        width: _width * 5,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: white, width: 2),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Icon(
-                          Icons.question_mark_outlined,
-                          color: white,
-                          size: 14,
-                        ),
-                      ),
-                      Flexible(
-                        child: SizedBox(),
-                        fit: FlexFit.tight,
-                      ),
-                      Text(
-                        "1595 ",
-                        style: GoogleFonts.mulish(
-                            fontSize: 16,
-                            color: white,
-                            fontWeight: FontWeight.w800),
-                      ),
-                      Text(
-                        "Cal",
-                        style: GoogleFonts.mulish(
-                            fontSize: 16,
-                            color: white,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: _height * 2.5,
-                  ),
-                  ExpansionContainer(),
-                  SizedBox(
-                    height: _height * 2.5,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Dinner",
-                        style: GoogleFonts.mulish(
-                            fontSize: 22,
-                            color: white,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        height: _height * 2.5,
-                        width: _width * 5,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: white, width: 2),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Icon(
-                          Icons.question_mark_outlined,
-                          color: white,
-                          size: 14,
-                        ),
-                      ),
-                      Flexible(
-                        child: SizedBox(),
-                        fit: FlexFit.tight,
-                      ),
-                      Text(
-                        "1595 ",
-                        style: GoogleFonts.mulish(
-                            fontSize: 16,
-                            color: white,
-                            fontWeight: FontWeight.w800),
-                      ),
-                      Text(
-                        "Cal",
-                        style: GoogleFonts.mulish(
-                            fontSize: 16,
-                            color: white,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: _height * 2.5,
-                  ),
-                  IngrediansContainer(),
-                  SizedBox(
-                    height: _height * 2.5,
-                  ),
-                  ExpansionContainer(),
-                  SizedBox(
-                    height: _height * 2.5,
-                  ),
-                  SizedBox(
-                    height: _height * 2.5,
-                  ),
-                  CustomButton(
+                    _breakfast
+                        ? Container(
+                            margin:
+                                EdgeInsets.symmetric(vertical: _height * 2.5),
+                            child: CalaryChart(data: chartData))
+                        : SizedBox(
+                            height: _height * 2.5,
+                          ),
+                    Container(
                       width: _width * 90,
-                      height: _height * 7,
-                      lableText: "Add New Foods/Recipe",
-                      onPressed: () {}),
-                  SizedBox(
-                    height: _height * 2.5,
-                  ),
-                  Text(
-                    "Actual & Target",
-                    style: GoogleFonts.mulish(
-                        fontSize: 22,
-                        color: white,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  SizedBox(
-                    height: _height * 2.5,
-                  ),
-                  Container(
-                      width: _width * 90,
-                      padding: EdgeInsets.fromLTRB(
-                          _width * 2.5, _height * 3, _width * 2.5, _height * 3),
-                      decoration: BoxDecoration(
+                      child: DragAndDropLists(
+                        disableScrolling: true,
+                        children: _data,
+                        onItemReorder: _onItemReorder,
+                        onListReorder: _onListReorder,
+                        itemDecorationWhileDragging: BoxDecoration(
                           color: transperant,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: white)),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: _width * 20,
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "Cal",
-                                  style: mulish14500,
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "Protein",
-                                  style: mulish14500,
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "Carbs",
-                                  style: mulish14500,
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "Fat",
-                                  style: mulish14500,
-                                ),
-                              )
-                            ],
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 3,
+                              // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        listPadding: EdgeInsets.all(0),
+                        lastItemTargetHeight: 0,
+                        // axis: Axis.horizontal,
+                        // listWidth: _width * 88,
+                        addLastItemTargetHeightToTop: false,
+                        lastListTargetSize: _height * 2.5,
+                        itemDragHandle: DragHandle(
+                          onLeft: true,
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 80, left: 5),
+                            child: Icon(
+                              Icons.drag_indicator_outlined,
+                              color: grey,
+                            ),
                           ),
-                          Divider(
-                            height: 35,
-                            color: grey,
+                        ),
+                      ),
+                    ),
+                    IngrediansContainer(),
+                    SizedBox(
+                      height: _height * 2.5,
+                    ),
+                    ExpansionContainer(
+                      isDragable: true,
+                      isSelected: isSelect,
+                      onTap: () {
+                        setState(() {
+                          isSelect = !isSelect;
+                        });
+                      },
+                    ),
+                    SizedBox(
+                      height: _height * 2.5,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Lunch",
+                          style: GoogleFonts.mulish(
+                              fontSize: 22,
+                              color: white,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _lunch = !_lunch;
+                            });
+                          },
+                          child: Container(
+                            height: _height * 2.5,
+                            width: _width * 5,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: white, width: 2),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Icon(
+                              Icons.question_mark_outlined,
+                              color: white,
+                              size: 14,
+                            ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: _width * 20,
-                                child: Text(
-                                  "Actual",
-                                  style: mulish14800,
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "1810",
-                                  style: mulish14600,
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "24%",
-                                  style: GoogleFonts.mulish(
-                                    color: primary,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "62%",
-                                  style: GoogleFonts.mulish(
-                                    color: pgreen,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "14%",
-                                  style: GoogleFonts.mulish(
-                                    color: pyellow,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              )
-                            ],
+                        ),
+                        Flexible(
+                          child: SizedBox(),
+                          fit: FlexFit.tight,
+                        ),
+                        Text(
+                          "1595 ",
+                          style: GoogleFonts.mulish(
+                              fontSize: 16,
+                              color: white,
+                              fontWeight: FontWeight.w800),
+                        ),
+                        Text(
+                          "Cal",
+                          style: GoogleFonts.mulish(
+                              fontSize: 16,
+                              color: white,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                    _lunch
+                        ? Container(
+                            margin:
+                                EdgeInsets.symmetric(vertical: _height * 2.5),
+                            child: CalaryChart(data: chartData))
+                        : SizedBox(
+                            height: _height * 2.5,
                           ),
-                          SizedBox(
-                            height: 20,
+                    ExpansionContainer(),
+                    SizedBox(
+                      height: _height * 2.5,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Dinner",
+                          style: GoogleFonts.mulish(
+                              fontSize: 22,
+                              color: white,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _dinner = !_dinner;
+                            });
+                          },
+                          child: Container(
+                            height: _height * 2.5,
+                            width: _width * 5,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: white, width: 2),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Icon(
+                              Icons.question_mark_outlined,
+                              color: white,
+                              size: 14,
+                            ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: _width * 20,
-                                child: Text(
-                                  "Target",
-                                  style: mulish14800,
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "1798",
-                                  style: mulish14600,
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "25",
-                                  style: GoogleFonts.mulish(
-                                    color: primary,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "60%",
-                                  style: GoogleFonts.mulish(
-                                    color: pgreen,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "14%",
-                                  style: GoogleFonts.mulish(
-                                    color: pyellow,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              )
-                            ],
+                        ),
+                        Flexible(
+                          child: SizedBox(),
+                          fit: FlexFit.tight,
+                        ),
+                        Text(
+                          "1595 ",
+                          style: GoogleFonts.mulish(
+                              fontSize: 16,
+                              color: white,
+                              fontWeight: FontWeight.w800),
+                        ),
+                        Text(
+                          "Cal",
+                          style: GoogleFonts.mulish(
+                              fontSize: 16,
+                              color: white,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                    _dinner
+                        ? Container(
+                            margin:
+                                EdgeInsets.symmetric(vertical: _height * 2.5),
+                            child: CalaryChart(data: chartData))
+                        : SizedBox(
+                            height: _height * 2.5,
                           ),
-                          Divider(
-                            height: 35,
-                            color: grey,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: _width * 20,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "+/-",
-                                  style: mulish14800,
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "12",
-                                  style: mulish14600,
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "-1%",
-                                  style: GoogleFonts.mulish(
-                                    color: primary,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "2%",
-                                  style: GoogleFonts.mulish(
-                                    color: pgreen,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: _width * 16,
-                                child: Text(
-                                  "0%",
-                                  style: GoogleFonts.mulish(
-                                    color: pyellow,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ))
-                ],
-              ),
-            ),
+                    IngrediansContainer(),
+                    SizedBox(
+                      height: _height * 2.5,
+                    ),
+                    ExpansionContainer(),
+                    SizedBox(
+                      height: _height * 2.5,
+                    ),
+                    SizedBox(
+                      height: _height * 2.5,
+                    ),
+                    CustomButton(
+                        width: _width * 90,
+                        height: _height * 7,
+                        lableText: "Add New Foods/Recipe",
+                        onPressed: () {}),
+                    SizedBox(
+                      height: _height * 2.5,
+                    ),
+                    Text(
+                      "Actual & Target",
+                      style: GoogleFonts.mulish(
+                          fontSize: 22,
+                          color: white,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      height: _height * 2.5,
+                    ),
+                    CalaryTable()
+                  ],
+                ),
+              );
+            }),
           )),
     );
   }
 
-  void show(BuildContext context, String message) {
+  _onItemReorder(
+      int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+    setState(() {
+      var movedItem = _data[oldListIndex].children.removeAt(oldItemIndex);
+      _data[newListIndex].children.insert(newItemIndex, movedItem);
+    });
+  }
+
+  _onListReorder(int oldListIndex, int newListIndex) {
+    setState(() {
+      var movedList = _data.removeAt(oldListIndex);
+      _data.insert(newListIndex, movedList);
+    });
+  }
+
+  void showSuggestion(BuildContext context, String message) {
     showGeneralDialog(
       context: context,
       pageBuilder: (ctx, a1, a2) {
@@ -679,4 +478,140 @@ class _MealPlanState extends State<MealPlan> {
       // transitionDuration: Duration(milliseconds: 700)
     );
   }
+
+  mealPlanBottomSheet(_height, _width, context) {
+    List<MealPlanBottomSheetModel> mealPlanBottomSheetDataList = [
+      MealPlanBottomSheetModel(
+        heading: "Rearrange/Portion Lock",
+        text: "Manage the meal plan list accordingly to your diet.",
+        icon: rearrangePortionLock,
+      ),
+      MealPlanBottomSheetModel(
+        heading: "Copy Day",
+        text: "Copy a meal plan from one day to another.",
+        icon: copyDay,
+      ),
+      MealPlanBottomSheetModel(
+        heading: "customize meal labels",
+        text: "Manage the meal label name accordingly to your plan.",
+        icon: mealLabels,
+      ),
+      MealPlanBottomSheetModel(
+        heading: "Clear Day",
+        text: "Clear all the meal plan list of the days.",
+        icon: clearDay,
+      ),
+    ];
+    //return SimpleSnappingSheet();
+    _selectedindex = 5;
+    return StatefulBuilder(builder: (context, setState) {
+      return Container(
+        height: _height * 90,
+        padding: EdgeInsets.fromLTRB(
+            _width * 5, _height * 2.5, _width * 5, _height * 2.5),
+        // ignore: prefer_const_constructors
+        decoration: BoxDecoration(
+            color: darkprimary,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0))),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Image.asset(
+                  drag,
+                  scale: 3,
+                ),
+              ),
+              SizedBox(
+                height: _height * 5,
+              ),
+              ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: mealPlanBottomSheetDataList.length,
+                  itemBuilder: ((context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedindex = index;
+                        });
+                        if (_selectedindex == 1) {
+                          Get.to(COpyDayMealPlan());
+                        }
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: _height * 3),
+                        padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: _width * 10,
+                              child: SvgPicture.asset(
+                                mealPlanBottomSheetDataList[index].icon,
+                                color:
+                                    _selectedindex == index ? primary : white,
+                              ),
+                            ),
+                            SizedBox(
+                              width: _width * 5,
+                            ),
+                            Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    mealPlanBottomSheetDataList[index].heading,
+                                    style: GoogleFonts.mulish(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        color: _selectedindex == index
+                                            ? primary
+                                            : white),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    mealPlanBottomSheetDataList[0].text,
+                                    style: GoogleFonts.mulish(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: _selectedindex == index
+                                            ? primary
+                                            : lightgrey),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        decoration: BoxDecoration(
+                            color:
+                                _selectedindex == index ? white : transperant,
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(color: lightgrey)),
+                      ),
+                    );
+                  }))
+            ],
+          ),
+        ),
+      );
+    });
+  }
+}
+
+class MealPlanBottomSheetModel {
+  final String heading;
+  final String text;
+  final String icon;
+
+  MealPlanBottomSheetModel({
+    required this.heading,
+    required this.text,
+    required this.icon,
+  });
 }

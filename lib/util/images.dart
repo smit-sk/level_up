@@ -8,7 +8,6 @@ final String bgimage1 = "assets/images/bg2.png";
 final String bgimage2 = "assets/images/bg3.png";
 final String bgimage3 = "assets/images/bg4.png";
 final String bgimage4 = "assets/images/bg5.png";
-
 final String bgimage6 = "assets/images/bg6.png";
 final String bgimage7 = "assets/images/bg7.png";
 final String bgimage8 = "assets/images/bg8.png";
@@ -53,3 +52,10 @@ final String logo = "assets/images/logo.png";
 final String resetDone = "assets/images/resetDone.png";
 
 final String mealPlanBG = 'assets/images/mealPlanBG.png';
+final String drag = 'assets/images/drag.png';
+
+
+final String rearrangePortionLock = 'assets/images/RearrangePortionLock.svg';
+final String mealLabels = 'assets/images/MealLabels.svg';
+final String copyDay = 'assets/images/CopyDay.svg';
+final String clearDay = 'assets/images/clearDay.svg';
