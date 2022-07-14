@@ -53,7 +53,8 @@ final String resetDone = "assets/images/resetDone.png";
 
 final String mealPlanBG = 'assets/images/mealPlanBG.png';
 final String drag = 'assets/images/drag.png';
-
+final String filterIcon = 'assets/Icons/filter.svg';
+final String juice = 'assets/images/juice.png';
 
 final String rearrangePortionLock = 'assets/images/RearrangePortionLock.svg';
 final String mealLabels = 'assets/images/MealLabels.svg';

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:levelup/controller/meal_plan_controller.dart';
+import 'package:levelup/helper/routeHelper.dart';
 import 'package:levelup/util/color.dart';
 import 'package:levelup/util/decoration.dart';
 import 'package:levelup/util/images.dart';
@@ -14,7 +15,7 @@ import 'package:levelup/view/base/Meal%20Plan%20Base/ExpansionContainer.dart';
 import 'package:levelup/view/base/Meal%20Plan%20Base/IngrediansContainer.dart';
 import 'package:levelup/view/base/Meal%20Plan%20Base/calaryChart.dart';
 import 'package:levelup/view/base/Meal%20Plan%20Base/calaryTable.dart';
-import 'package:intl/intl.dart';
+import 'package:levelup/view/screens/Meal%20Plan/ClearDay.dart';
 import 'package:levelup/view/screens/Meal%20Plan/CopyDay.dart';
 
 class MealPlan extends StatefulWidget {
@@ -33,7 +34,7 @@ class _MealPlanState extends State<MealPlan> {
   bool _breakfast = false;
   bool _lunch = false;
   bool _dinner = false;
-  int _selectedindex = 1;
+  int _selectedindex = 5;
 
   bool isSelect = false;
   ScrollController _scrollController = ScrollController();
@@ -117,7 +118,7 @@ class _MealPlanState extends State<MealPlan> {
                           physics: BouncingScrollPhysics(),
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          itemCount: mealplanController.weekDateList.length,
+                          itemCount: mealplanController.copyDayWeekList.length,
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {},
@@ -134,15 +135,16 @@ class _MealPlanState extends State<MealPlan> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      mealplanController.weekDayList[index]
-                                          .toString(),
+                                      mealplanController
+                                          .copyDayWeekList[index].day,
                                       style: GoogleFonts.mulish(
                                           fontSize: 16,
                                           color: white,
                                           fontWeight: FontWeight.w700),
                                     ),
                                     Text(
-                                      mealplanController.weekDateList[index]
+                                      mealplanController
+                                          .copyDayWeekList[index].date
                                           .toString(),
                                       style: GoogleFonts.mulish(
                                           fontSize: 12,
@@ -235,7 +237,27 @@ class _MealPlanState extends State<MealPlan> {
                       width: _width * 90,
                       child: DragAndDropLists(
                         disableScrolling: true,
-                        children: _data,
+
+                        children: [
+                          DragAndDropList(children: [
+                            DragAndDropItem(
+                                child: IngrediansContainer(
+                              isSelected: true,
+                              isDragable:
+                                  mealplanController.isRearrangePortionLock,
+                            )),
+                            DragAndDropItem(
+                                child: IngrediansContainer(
+                              isDragable:
+                                  mealplanController.isRearrangePortionLock,
+                            )),
+                            DragAndDropItem(
+                                child: IngrediansContainer(
+                              isDragable:
+                                  mealplanController.isRearrangePortionLock,
+                            ))
+                          ]),
+                        ],
                         onItemReorder: _onItemReorder,
                         onListReorder: _onListReorder,
                         itemDecorationWhileDragging: BoxDecoration(
@@ -253,6 +275,7 @@ class _MealPlanState extends State<MealPlan> {
                         lastItemTargetHeight: 0,
                         // axis: Axis.horizontal,
                         // listWidth: _width * 88,
+
                         addLastItemTargetHeightToTop: false,
                         lastListTargetSize: _height * 2.5,
                         itemDragHandle: DragHandle(
@@ -261,18 +284,22 @@ class _MealPlanState extends State<MealPlan> {
                             padding: EdgeInsets.only(bottom: 80, left: 5),
                             child: Icon(
                               Icons.drag_indicator_outlined,
-                              color: grey,
+                              color: mealplanController.isRearrangePortionLock
+                                  ? grey
+                                  : transperant,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    IngrediansContainer(),
+                    IngrediansContainer(
+                      isDragable: mealplanController.isRearrangePortionLock,
+                    ),
                     SizedBox(
                       height: _height * 2.5,
                     ),
                     ExpansionContainer(
-                      isDragable: true,
+                      isDragable: mealplanController.isRearrangePortionLock,
                       isSelected: isSelect,
                       onTap: () {
                         setState(() {
@@ -343,7 +370,9 @@ class _MealPlanState extends State<MealPlan> {
                         : SizedBox(
                             height: _height * 2.5,
                           ),
-                    ExpansionContainer(),
+                    ExpansionContainer(
+                      isDragable: mealplanController.isRearrangePortionLock,
+                    ),
                     SizedBox(
                       height: _height * 2.5,
                     ),
@@ -407,11 +436,15 @@ class _MealPlanState extends State<MealPlan> {
                         : SizedBox(
                             height: _height * 2.5,
                           ),
-                    IngrediansContainer(),
+                    IngrediansContainer(
+                      isDragable: mealplanController.isRearrangePortionLock,
+                    ),
                     SizedBox(
                       height: _height * 2.5,
                     ),
-                    ExpansionContainer(),
+                    ExpansionContainer(
+                      isDragable: mealplanController.isRearrangePortionLock,
+                    ),
                     SizedBox(
                       height: _height * 2.5,
                     ),
@@ -422,7 +455,10 @@ class _MealPlanState extends State<MealPlan> {
                         width: _width * 90,
                         height: _height * 7,
                         lableText: "Add New Foods/Recipe",
-                        onPressed: () {}),
+                        onPressed: () {
+                          Get.toNamed(
+                              RouteHelper.getAddFoodRecipeMealPlanRoute());
+                        }),
                     SizedBox(
                       height: _height * 2.5,
                     ),
@@ -469,13 +505,6 @@ class _MealPlanState extends State<MealPlan> {
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black54,
-      // transitionBuilder: (ctx, a1, a2, child) {
-      //   return SlideTransition(
-      //       position:
-      //           Tween(begin: Offset(0, -1), end: Offset(0, 0)).animate(a1),
-      //       child: child);
-      // },
-      // transitionDuration: Duration(milliseconds: 700)
     );
   }
 
@@ -502,8 +531,7 @@ class _MealPlanState extends State<MealPlan> {
         icon: clearDay,
       ),
     ];
-    //return SimpleSnappingSheet();
-    _selectedindex = 5;
+
     return StatefulBuilder(builder: (context, setState) {
       return Container(
         height: _height * 90,
@@ -536,10 +564,27 @@ class _MealPlanState extends State<MealPlan> {
                     return GestureDetector(
                       onTap: () {
                         setState(() {
-                          _selectedindex = index;
+                          _selectedindex = _selectedindex != index ? index : 5;
                         });
-                        if (_selectedindex == 1) {
+
+                        if (index == 1) {
                           Get.to(COpyDayMealPlan());
+                        } else if (index == 3) {
+                          Get.to(() => ClearDay());
+                        } else if (index == 0) {
+                          if (Get.find<MealPlanController>()
+                              .isRearrangePortionLock) {
+                            Get.find<MealPlanController>()
+                                .updateRearrangePortionLock(false);
+                          } else {
+                            Get.find<MealPlanController>()
+                                .updateRearrangePortionLock(true);
+                          }
+                        }
+
+                        if (index != 0) {
+                          Get.find<MealPlanController>()
+                              .updateRearrangePortionLock(false);
                         }
                       },
                       child: Container(

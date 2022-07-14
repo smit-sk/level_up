@@ -13,6 +13,9 @@ import 'package:levelup/view/screens/Auth/Sign%20In/SignInCreate.dart';
 import 'package:levelup/view/screens/Auth/Sign%20In/resetPassword.dart';
 import 'package:levelup/view/screens/Auth/Sign%20In/resetPasswordDone.dart';
 import 'package:levelup/view/screens/Auth/Sign%20In/signIn.dart';
+import 'package:levelup/view/screens/Meal%20Plan/AddFoodRecipe.dart';
+import 'package:levelup/view/screens/Meal%20Plan/ClearDay.dart';
+import 'package:levelup/view/screens/Meal%20Plan/CopyDay.dart';
 import 'package:levelup/view/screens/Meal%20Plan/EditFood.dart';
 import 'package:levelup/view/screens/Meal%20Plan/EditRecipe.dart';
 import 'package:levelup/view/screens/Meal%20Plan/MealPan.dart';
@@ -46,6 +49,9 @@ class RouteHelper {
   static const String mealPlan = '/meal-plan';
   static const String editfoodMealPlan = '/edit-food-mealplan';
   static const String editrecipeMealPlan = '/edit-recipe-mealpaln';
+  static const String copyDayMealPlan = '/copy-day-mealpaln';
+  static const String clearDayMealPlan = '/clear-day-mealpaln';
+  static const String addFoodRecipeMealPlan = '/add-food/recipe-mealpaln';
 
   // static String getRoute() => '$';
   static String getInitialRoute() => initial;
@@ -70,6 +76,9 @@ class RouteHelper {
   static String getMealPlanRoute() => '$mealPlan';
   static String getEditFoodMealPlanRoute() => '$editfoodMealPlan';
   static String getEditRecipeMealPlanRoute() => '$editrecipeMealPlan';
+  static String getCopyDayMealPlanRoute() => '$copyDayMealPlan';
+  static String getClearDayMealPlanRoute() => '$clearDayMealPlan';
+  static String getAddFoodRecipeMealPlanRoute() => '$addFoodRecipeMealPlan';
   // static String getRoute() => '$';
 
   static List<GetPage> routes = [
@@ -89,11 +98,15 @@ class RouteHelper {
     GetPage(name: bodyFatCreateAccount, page: () => BodyFat()),
     GetPage(name: resultCreateAccount, page: () => ResultCA()),
     GetPage(name: getStartedToApp, page: () => GetStartedCreateAccount()),
+    
     GetPage(name: dashboard, page: () => Dashboard()),
+    
     GetPage(name: mealPlan, page: () => MealPlan()),
-
     GetPage(name: editfoodMealPlan, page: () => EditFood()),
     GetPage(name: editrecipeMealPlan, page: () => EditRecipeMealPlan()),
+    GetPage(name: copyDayMealPlan, page: () => COpyDayMealPlan()),
+    GetPage(name: clearDayMealPlan, page: () => ClearDay()),
+    GetPage(name: addFoodRecipeMealPlan, page: () => AddFoodRecipe()),
     //GetPage(name: , page: () => ),
     //GetPage(name: , page: () => ),
     //GetPage(name: , page: () => ),

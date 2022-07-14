@@ -52,7 +52,7 @@ class _BigCustomRadioBUttonState extends State<BigCustomRadioBUtton> {
               ),
               decoration: BoxDecoration(
                 color: widget.isSelectedLeftText ? white : transperant,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(9),
                 //border: Border.all(color: lightgrey),
               ),
             ),
@@ -73,7 +73,7 @@ class _BigCustomRadioBUttonState extends State<BigCustomRadioBUtton> {
               ),
               decoration: BoxDecoration(
                 color: widget.isSelectedRightText ? white : transperant,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(9),
                 // border: Border.all(
                 //     color: widget.isSelectedMatric ? white : lightgrey),
               ),
@@ -82,7 +82,7 @@ class _BigCustomRadioBUttonState extends State<BigCustomRadioBUtton> {
         ],
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: white),
       ),
     );

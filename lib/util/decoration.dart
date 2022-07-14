@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+  final GlobalKey<ScaffoldMessengerState> snackbarKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 final TextStyle textStyleHeading = GoogleFonts.mulish(
     color: Colors.white, fontSize: 26, fontWeight: FontWeight.w800);
 

@@ -7,11 +7,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:levelup/controller/meal_plan_controller.dart';
 import 'package:levelup/util/color.dart';
 import 'package:levelup/util/decoration.dart';
+import 'package:levelup/util/images.dart';
 import 'package:levelup/view/base/CustomButton.dart';
-import 'package:levelup/view/base/CustomDropDown.dart';
 
-import '../../../util/images.dart';
-final SnackBar copyplanSnackbar = SnackBar(
+final SnackBar clearDaySnackBar = SnackBar(
     backgroundColor: transperant,
     content: Container(
       height: 50,
@@ -22,7 +21,7 @@ final SnackBar copyplanSnackbar = SnackBar(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Meal plan copied sucessfully",
+            "Clear day(s) sucessfully",
             style: mulish16700,
           ),
           Icon(
@@ -32,17 +31,15 @@ final SnackBar copyplanSnackbar = SnackBar(
         ],
       ),
     ));
-class COpyDayMealPlan extends StatefulWidget {
-  const COpyDayMealPlan({Key? key}) : super(key: key);
+
+class ClearDay extends StatefulWidget {
+  const ClearDay({Key? key}) : super(key: key);
 
   @override
-  State<COpyDayMealPlan> createState() => _COpyDayMealPlanState();
+  State<ClearDay> createState() => _ClearDayState();
 }
 
-class _COpyDayMealPlanState extends State<COpyDayMealPlan> {
-  String selectedDropdown =
-      Get.find<MealPlanController>().copyDayWeekList[0].daydate;
-
+class _ClearDayState extends State<ClearDay> {
   @override
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width * 0.01;
@@ -68,7 +65,7 @@ class _COpyDayMealPlanState extends State<COpyDayMealPlan> {
             },
           ),
           title: Text(
-            "Copy Day",
+            "Clear Day",
             style: textStyleAppBar,
           ),
         ),
@@ -83,51 +80,26 @@ class _COpyDayMealPlanState extends State<COpyDayMealPlan> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Copy day meal plan list",
+                  "List of the day",
                   style: GoogleFonts.mulish(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: lightgrey),
                 ),
                 SizedBox(
-                  height: _height * 2.5,
-                ),
-                CustomDropDownMenu(
-                    height: _height * 7,
-                    width: _width * 90,
-                    dropdownWidth: _width * 80,
-                    datalist: Get.find<MealPlanController>().weekDayDateList,
-                    selectedData: selectedDropdown,
-                    dropdowncolor: primary.withOpacity(0.5),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedDropdown = value!;
-                      });
-                    }),
-                SizedBox(
-                  height: _height * 5,
-                ),
-                Text(
-                  "Paste day meal plan list",
-                  style: GoogleFonts.mulish(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: lightgrey),
-                ),
-                SizedBox(
-                  height: _height * 2.5,
+                  height: _height * 3,
                 ),
                 ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemCount:
-                        Get.find<MealPlanController>().copyDayWeekList.length,
+                        Get.find<MealPlanController>().clearDayWeekList.length,
                     itemBuilder: ((context, index) {
                       bool isSelect = false;
                       return Container(
                         padding:
-                            const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                        margin: const EdgeInsets.only(
+                            EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                        margin: EdgeInsets.only(
                           bottom: 20,
                         ),
                         decoration: BoxDecoration(
@@ -139,14 +111,15 @@ class _COpyDayMealPlanState extends State<COpyDayMealPlan> {
                                 builder: (mealplancontroller) {
                               return Checkbox(
                                 value: Get.find<MealPlanController>()
-                                    .copyDayWeekList[index]
+                                    .clearDayWeekList[index]
                                     .isSelected,
                                 fillColor:
                                     MaterialStateProperty.all<Color>(white),
                                 checkColor: primary,
                                 onChanged: (value) {
                                   Get.find<MealPlanController>()
-                                      .updateSelecteddayofweekCopyDay(value, index);
+                                      .updateSelecteddayofweekClearDay(
+                                          value, index);
                                 },
                                 shape: RoundedRectangleBorder(
                                     side: BorderSide(color: white, width: 2),
@@ -156,7 +129,7 @@ class _COpyDayMealPlanState extends State<COpyDayMealPlan> {
                             RichText(
                               text: TextSpan(
                                 text:
-                                    '${Get.find<MealPlanController>().copyDayWeekList[index].day} ',
+                                    '${Get.find<MealPlanController>().clearDayWeekList[index].day} ',
                                 style: GoogleFonts.mulish(
                                     color: white,
                                     fontSize: 16,
@@ -164,7 +137,7 @@ class _COpyDayMealPlanState extends State<COpyDayMealPlan> {
                                 children: <TextSpan>[
                                   TextSpan(
                                     text:
-                                        ' |  ${Get.find<MealPlanController>().copyDayWeekList[index].date}',
+                                        ' |  ${Get.find<MealPlanController>().clearDayWeekList[index].date}',
                                     style: GoogleFonts.mulish(
                                         color: white,
                                         fontSize: 14,
@@ -183,12 +156,11 @@ class _COpyDayMealPlanState extends State<COpyDayMealPlan> {
                 CustomButton(
                     width: _width * 90,
                     height: _height * 7,
-                    lableText: "Past(3)",
+                    lableText: "Clear(3)",
                     onPressed: () {
                       Get.back();
                       Get.back();
-                      snackbarKey.currentState
-                          ?.showSnackBar(copyplanSnackbar);
+                      snackbarKey.currentState?.showSnackBar(clearDaySnackBar);
                       //copySnackbar(_height);
                     }),
                 SizedBox(
@@ -201,7 +173,4 @@ class _COpyDayMealPlanState extends State<COpyDayMealPlan> {
       ),
     );
   }
-
-  
-
 }

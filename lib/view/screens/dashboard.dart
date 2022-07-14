@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:levelup/controller/add_foodrecipe_controller.dart';
 import 'package:levelup/controller/meal_plan_controller.dart';
 import 'package:levelup/helper/routeHelper.dart';
 import 'package:levelup/util/color.dart';
@@ -16,6 +17,8 @@ class Dashboard extends StatelessWidget {
   Dashboard({Key? key}) : super(key: key);
 
   MealPlanController mealplanController = Get.put(MealPlanController());
+  AddFoodRecipeController addFoodRecipeController =
+      Get.put(AddFoodRecipeController());
 
   @override
   Widget build(BuildContext context) {
