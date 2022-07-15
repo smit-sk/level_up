@@ -25,16 +25,9 @@ class MealPlan extends StatefulWidget {
 }
 
 class _MealPlanState extends State<MealPlan> {
-  final List<CalaryChartData> chartData = [
-    CalaryChartData('Protein', 35, "135g", Color(0xFF8912FB)),
-    CalaryChartData('Carbs', 60, "547g", Color(0xFFFEB13D)),
-    CalaryChartData('Fat', 5, "265g", Color(0xFF2BB9B0)),
-  ];
-
   bool _breakfast = false;
   bool _lunch = false;
   bool _dinner = false;
-  int _selectedindex = 5;
 
   bool isSelect = false;
   ScrollController _scrollController = ScrollController();
@@ -118,15 +111,22 @@ class _MealPlanState extends State<MealPlan> {
                           physics: BouncingScrollPhysics(),
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          itemCount: mealplanController.copyDayWeekList.length,
+                          itemCount: mealplanController.weekDayDateList.length,
                           itemBuilder: (context, index) {
+                            print("${mealplanController.weekDayDateList}");
                             return GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                mealplanController.changeSelectedDate(index);
+                              },
                               child: Container(
-                                margin: EdgeInsets.fromLTRB(0, 20, 20, 30),
-                                padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                                margin: EdgeInsets.fromLTRB(0, 20, 15, 20),
+                                padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
+                                    color: mealplanController
+                                            .weekDayDateList[index].isSelected
+                                        ? white
+                                        : transperant,
                                     border: Border.all(
                                       color: white,
                                     )),
@@ -136,19 +136,27 @@ class _MealPlanState extends State<MealPlan> {
                                   children: [
                                     Text(
                                       mealplanController
-                                          .copyDayWeekList[index].day,
+                                          .weekDayDateList[index].day,
                                       style: GoogleFonts.mulish(
                                           fontSize: 16,
-                                          color: white,
+                                          color: mealplanController
+                                                  .weekDayDateList[index]
+                                                  .isSelected
+                                              ? primary
+                                              : white,
                                           fontWeight: FontWeight.w700),
                                     ),
                                     Text(
                                       mealplanController
-                                          .copyDayWeekList[index].date
+                                          .weekDayDateList[index].date
                                           .toString(),
                                       style: GoogleFonts.mulish(
                                           fontSize: 12,
-                                          color: white,
+                                          color: mealplanController
+                                                  .weekDayDateList[index]
+                                                  .isSelected
+                                              ? primary
+                                              : white,
                                           fontWeight: FontWeight.w600),
                                     )
                                   ],
@@ -168,7 +176,7 @@ class _MealPlanState extends State<MealPlan> {
                       height: _height * 2.5,
                     ),
                     CalaryChart(
-                      data: chartData,
+                      data: mealplanController.chartData,
                     ),
                     SizedBox(
                       height: _height * 2.5,
@@ -229,7 +237,8 @@ class _MealPlanState extends State<MealPlan> {
                         ? Container(
                             margin:
                                 EdgeInsets.symmetric(vertical: _height * 2.5),
-                            child: CalaryChart(data: chartData))
+                            child:
+                                CalaryChart(data: mealplanController.chartData))
                         : SizedBox(
                             height: _height * 2.5,
                           ),
@@ -366,7 +375,8 @@ class _MealPlanState extends State<MealPlan> {
                         ? Container(
                             margin:
                                 EdgeInsets.symmetric(vertical: _height * 2.5),
-                            child: CalaryChart(data: chartData))
+                            child:
+                                CalaryChart(data: mealplanController.chartData))
                         : SizedBox(
                             height: _height * 2.5,
                           ),
@@ -432,7 +442,8 @@ class _MealPlanState extends State<MealPlan> {
                         ? Container(
                             margin:
                                 EdgeInsets.symmetric(vertical: _height * 2.5),
-                            child: CalaryChart(data: chartData))
+                            child:
+                                CalaryChart(data: mealplanController.chartData))
                         : SizedBox(
                             height: _height * 2.5,
                           ),
@@ -532,7 +543,7 @@ class _MealPlanState extends State<MealPlan> {
       ),
     ];
 
-    return StatefulBuilder(builder: (context, setState) {
+    return GetBuilder<MealPlanController>(builder: (mealPlanController) {
       return Container(
         height: _height * 90,
         padding: EdgeInsets.fromLTRB(
@@ -563,12 +574,14 @@ class _MealPlanState extends State<MealPlan> {
                   itemBuilder: ((context, index) {
                     return GestureDetector(
                       onTap: () {
-                        setState(() {
-                          _selectedindex = _selectedindex != index ? index : 5;
-                        });
+                        mealPlanController.updateselectedMealPlanBSitem(
+                            mealPlanController.selectedBottomSheetitemIndex !=
+                                    index
+                                ? index
+                                : 5);
 
                         if (index == 1) {
-                          Get.to(COpyDayMealPlan());
+                          Get.to(CopyDayMealPlan());
                         } else if (index == 3) {
                           Get.to(() => ClearDay());
                         } else if (index == 0) {
@@ -596,8 +609,11 @@ class _MealPlanState extends State<MealPlan> {
                               width: _width * 10,
                               child: SvgPicture.asset(
                                 mealPlanBottomSheetDataList[index].icon,
-                                color:
-                                    _selectedindex == index ? primary : white,
+                                color: mealPlanController
+                                            .selectedBottomSheetitemIndex ==
+                                        index
+                                    ? primary
+                                    : white,
                               ),
                             ),
                             SizedBox(
@@ -612,7 +628,9 @@ class _MealPlanState extends State<MealPlan> {
                                     style: GoogleFonts.mulish(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
-                                        color: _selectedindex == index
+                                        color: mealPlanController
+                                                    .selectedBottomSheetitemIndex ==
+                                                index
                                             ? primary
                                             : white),
                                   ),
@@ -624,7 +642,9 @@ class _MealPlanState extends State<MealPlan> {
                                     style: GoogleFonts.mulish(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
-                                        color: _selectedindex == index
+                                        color: mealPlanController
+                                                    .selectedBottomSheetitemIndex ==
+                                                index
                                             ? primary
                                             : lightgrey),
                                   ),
@@ -634,8 +654,11 @@ class _MealPlanState extends State<MealPlan> {
                           ],
                         ),
                         decoration: BoxDecoration(
-                            color:
-                                _selectedindex == index ? white : transperant,
+                            color: mealPlanController
+                                        .selectedBottomSheetitemIndex ==
+                                    index
+                                ? white
+                                : transperant,
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(color: lightgrey)),
                       ),

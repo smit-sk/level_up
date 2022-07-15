@@ -4,8 +4,8 @@ import 'package:levelup/util/color.dart';
 import 'package:levelup/util/decoration.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class CalaryChartData {
-  CalaryChartData(this.x, this.y, this.gram, [this.color]);
+class CalaryChartModel {
+  CalaryChartModel(this.x, this.y, this.gram, [this.color]);
   final String x;
   final double y;
   final String gram;
@@ -13,7 +13,7 @@ class CalaryChartData {
 }
 
 class CalaryChart extends StatelessWidget {
-  List<CalaryChartData> data;
+  List<CalaryChartModel> data;
 
   CalaryChart({Key? key, required this.data}) : super(key: key);
 
@@ -60,11 +60,11 @@ class CalaryChart extends StatelessWidget {
                 ),
               ))
             ], series: <CircularSeries>[
-              DoughnutSeries<CalaryChartData, String>(
+              DoughnutSeries<CalaryChartModel, String>(
                   dataSource: data,
-                  pointColorMapper: (CalaryChartData data, _) => data.color,
-                  xValueMapper: (CalaryChartData data, _) => data.x,
-                  yValueMapper: (CalaryChartData data, _) => data.y,
+                  pointColorMapper: (CalaryChartModel data, _) => data.color,
+                  xValueMapper: (CalaryChartModel data, _) => data.x,
+                  yValueMapper: (CalaryChartModel data, _) => data.y,
                   cornerStyle: CornerStyle.bothCurve,
                   innerRadius: '80%',
                   radius: '85%'),

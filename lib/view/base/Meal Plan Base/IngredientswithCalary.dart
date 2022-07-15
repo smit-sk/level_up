@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -5,12 +7,27 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:levelup/util/color.dart';
 import 'package:levelup/util/images.dart';
 
+final kInnerDecoration = BoxDecoration(
+  color: Colors.white,
+  border: Border.all(color: Colors.white),
+  borderRadius: BorderRadius.circular(10),
+);
+// border for all 3 colors
+final kGradientBoxDecoration = BoxDecoration(
+  gradient: LinearGradient(
+      colors: [primary, white],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter),
+  borderRadius: BorderRadius.circular(32),
+);
+
 class IngredientwithCalary extends StatelessWidget {
   double? height;
   double? width;
   String heading;
   bool isSelected;
   String subheading;
+  bool? isRecipe;
   Function() onTap;
 
   IngredientwithCalary({
@@ -20,6 +37,7 @@ class IngredientwithCalary extends StatelessWidget {
     required this.isSelected,
     required this.heading,
     required this.subheading,
+    this.isRecipe,
     required this.onTap,
   }) : super(key: key);
 
@@ -44,21 +62,43 @@ class IngredientwithCalary extends StatelessWidget {
           //mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              height: _height * 7,
-              width: _width * 14,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: ExactAssetImage(juice),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                border: Border.all(
-                  color: pgreen,
-                  width: 4.0,
-                ),
-              ),
-            ),
+            isRecipe ?? false
+                ? ClipOval(
+                    clipBehavior: Clip.antiAlias,
+                    child: Container(
+                      child: Padding(
+                        padding: EdgeInsets.all(5), //width of the border
+                        child: ClipOval(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                            width: _width *
+                                14, // this width forces the container to be a circle
+                            height: _height *
+                                7, // this height forces the container to be a circle
+                            child: Image.asset(juice),
+                            decoration: kInnerDecoration,
+                          ),
+                        ),
+                      ),
+                      decoration: kGradientBoxDecoration,
+                    ),
+                  )
+                : Container(
+                    height: _height * 8,
+                    width: _width * 16,
+                    decoration: BoxDecoration(
+                      color: white,
+                      image: DecorationImage(
+                        image: ExactAssetImage(logo),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                      border: Border.all(
+                        color: pgreen,
+                        width: 5.0,
+                      ),
+                    ),
+                  ),
             SizedBox(
               width: _width * 5,
             ),

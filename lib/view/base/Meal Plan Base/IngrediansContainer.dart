@@ -45,8 +45,8 @@ class IngrediansContainer extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      height: _height * 8,
-                      width: _width * 16,
+                      height: _height * 7,
+                      width: _width * 14,
                       decoration: BoxDecoration(
                         color: white,
                         image: DecorationImage(

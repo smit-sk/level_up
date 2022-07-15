@@ -104,7 +104,7 @@ class RouteHelper {
     GetPage(name: mealPlan, page: () => MealPlan()),
     GetPage(name: editfoodMealPlan, page: () => EditFood()),
     GetPage(name: editrecipeMealPlan, page: () => EditRecipeMealPlan()),
-    GetPage(name: copyDayMealPlan, page: () => COpyDayMealPlan()),
+    GetPage(name: copyDayMealPlan, page: () => CopyDayMealPlan()),
     GetPage(name: clearDayMealPlan, page: () => ClearDay()),
     GetPage(name: addFoodRecipeMealPlan, page: () => AddFoodRecipe()),
     //GetPage(name: , page: () => ),

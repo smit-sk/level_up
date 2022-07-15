@@ -10,6 +10,7 @@ import 'package:levelup/util/images.dart';
 import 'package:levelup/view/base/BigCustomRadioButton.dart';
 import 'package:levelup/view/base/Meal%20Plan%20Base/IngredientswithCalary.dart';
 import 'package:levelup/view/screens/Meal%20Plan/EditItemInFoodRecipe.dart';
+import 'package:levelup/view/screens/Meal%20Plan/FilterFoodRecipe.dart';
 
 class AddFoodRecipe extends StatelessWidget {
   const AddFoodRecipe({Key? key}) : super(key: key);
@@ -76,7 +77,7 @@ class AddFoodRecipe extends StatelessWidget {
                                         color: white,
                                         fontWeight: FontWeight.w700),
                                     onChanged: addfoodrecipecontroller
-                                        .onItemChangedIngredientsList,
+                                        .onItemChangedFoodsList,
                                     decoration: InputDecoration(
                                       prefixIcon: Icon(
                                         Icons.search,
@@ -105,23 +106,56 @@ class AddFoodRecipe extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  width: 50,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Text(
-                                        "|",
-                                        style: GoogleFonts.poppins(
-                                          color: grey,
-                                          fontSize: 18,
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.to(FilterFoodRecipe());
+                                  },
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Container(
+                                        width: 55,
+                                        height: 35,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(
+                                              "|",
+                                              style: GoogleFonts.poppins(
+                                                color: grey,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            SvgPicture.asset(
+                                              filterIcon,
+                                              color: white,
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      SvgPicture.asset(
-                                        filterIcon,
-                                        color: white,
-                                      ),
+                                      addfoodrecipecontroller.filterBadge != 0
+                                          ? Positioned(
+                                              right: 0,
+                                              top: 0,
+                                              child: Container(
+                                                width: 20,
+                                                height: 20,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color: primary,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                child: Text(
+                                                  addfoodrecipecontroller
+                                                      .filterBadge
+                                                      .toString(),
+                                                  style: mulish14700,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            )
+                                          : SizedBox.shrink()
                                     ],
                                   ),
                                 ),
@@ -150,29 +184,27 @@ class AddFoodRecipe extends StatelessWidget {
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               itemCount: addfoodrecipecontroller
-                                  .searchResultIngredientsList.length,
+                                  .searchResultFoodsList.length,
                               itemBuilder: ((context, index) {
                                 return IngredientwithCalary(
                                   heading: addfoodrecipecontroller
-                                      .searchResultIngredientsList[index]
-                                      .mainIngredients,
+                                      .searchResultFoodsList[index].mainFoods,
                                   subheading: addfoodrecipecontroller
-                                      .searchResultIngredientsList[index]
-                                      .subIngredientsName,
+                                      .searchResultFoodsList[index]
+                                      .subFoodsName,
+                                  isRecipe: addfoodrecipecontroller.isRecipe,
                                   onTap: () {
-                                    addfoodrecipecontroller
-                                        .selectIngredients(index);
+                                    addfoodrecipecontroller.selectFoods(index);
                                   },
                                   isSelected: addfoodrecipecontroller
-                                      .searchResultIngredientsList[index]
-                                      .isSelected,
+                                      .searchResultFoodsList[index].isSelected,
                                 );
                               }))
                         ],
                       ),
                     ),
                   ),
-                  addfoodrecipecontroller.selectedIngredientsList.isNotEmpty
+                  addfoodrecipecontroller.selectedFoodsList.isNotEmpty
                       ? Container(
                           height: _height * 7,
                           margin: EdgeInsets.only(bottom: 20),
@@ -209,7 +241,7 @@ class AddFoodRecipe extends StatelessWidget {
                                         side: BorderSide(color: primary)))),
                             child: Center(
                               child: Text(
-                                "Add(${addfoodrecipecontroller.selectedIngredientsList.length})",
+                                "Add(${addfoodrecipecontroller.selectedFoodsList.length})",
                                 style: GoogleFonts.mulish(
                                     color: Colors.white,
                                     fontSize: 16,
